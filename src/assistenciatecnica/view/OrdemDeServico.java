@@ -24,8 +24,10 @@ package assistenciatecnica.view;
 import assistenciatecnica.control.ControladorAtendimentos;
 import assistenciatecnica.control.ControladorBancodeDados;
 import assistenciatecnica.control.ControladorClientes;
+import assistenciatecnica.control.ControladorOS;
 import assistenciatecnica.control.ControladorPagamentos;
 import assistenciatecnica.control.ControladorPeca;
+import assistenciatecnica.control.ControladorRelatorios;
 import assistenciatecnica.control.ControladorServico;
 import assistenciatecnica.control.ControladorUsuario;
 import assistenciatecnica.control.util.ControladorTabelas;
@@ -38,6 +40,7 @@ import assistenciatecnica.model.Servicos;
 import assistenciatecnica.model.Usuario;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Toolkit;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.KeyEvent;
@@ -49,9 +52,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -79,7 +81,7 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
 
         this.getAtendimentos();
         this.getPagamentos();
-        //this.pagamentoVisible(false, false);
+        this.pagamentoVisible(false, false);
     }
 
     /** This method is called from within the constructor to
@@ -153,6 +155,10 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
         botaoProcurar = new javax.swing.JButton();
         botaoEditar = new javax.swing.JButton();
         botaoApagar = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        menuImprimir = new javax.swing.JMenu();
+        menuImprimirAbertura = new javax.swing.JMenuItem();
+        menuImprimirFechamento = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Ordem de Serviço");
@@ -636,6 +642,7 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
         textoValorFinal.setFocusable(false);
 
         textoPorcentagemDesconto.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0.00 %"))));
+        textoPorcentagemDesconto.setText("0,00 %");
         textoPorcentagemDesconto.addFocusListener(new java.awt.event.FocusAdapter()
         {
             public void focusLost(java.awt.event.FocusEvent evt)
@@ -703,6 +710,13 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
         botaoProcurar.setMaximumSize(new java.awt.Dimension(150, 32));
         botaoProcurar.setMinimumSize(new java.awt.Dimension(150, 32));
         botaoProcurar.setPreferredSize(new java.awt.Dimension(150, 32));
+        botaoProcurar.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                botaoProcurarActionPerformed(evt);
+            }
+        });
 
         botaoEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assistenciatecnica/view/img/pencil.png"))); // NOI18N
         botaoEditar.setText("Editar");
@@ -715,6 +729,40 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
         botaoApagar.setMaximumSize(new java.awt.Dimension(150, 32));
         botaoApagar.setMinimumSize(new java.awt.Dimension(150, 32));
         botaoApagar.setPreferredSize(new java.awt.Dimension(150, 32));
+        botaoApagar.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                botaoApagarActionPerformed(evt);
+            }
+        });
+
+        menuImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assistenciatecnica/view/img/printer-5.png"))); // NOI18N
+        menuImprimir.setText("Imprimir");
+
+        menuImprimirAbertura.setText("Abertura");
+        menuImprimirAbertura.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuImprimirAberturaActionPerformed(evt);
+            }
+        });
+        menuImprimir.add(menuImprimirAbertura);
+
+        menuImprimirFechamento.setText("Fechamento");
+        menuImprimirFechamento.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuImprimirFechamentoActionPerformed(evt);
+            }
+        });
+        menuImprimir.add(menuImprimirFechamento);
+
+        jMenuBar1.add(menuImprimir);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -818,11 +866,18 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
             if(!textoEntrega.getText().isEmpty())
             {
                 cal.setTime(sdf.parse(textoEntrega.getText()));
-                os.setFechamento(cal);
+                os.setEntrega(cal);
             }
         }
         catch (ParseException ex) {
             
+        }
+        
+        //Pagamento
+        if(comboPagamento.getSelectedIndex() != -1)
+        {
+            os.setPagamento(new ControladorPagamentos().getPagamentoByNome(comboPagamento.getSelectedItem().toString()));
+            os.setParcelasPagamento(Integer.parseInt(textoParcelas.getText()));
         }
         
         //Atendimento
@@ -865,8 +920,18 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
             bd.atualizar(os, this);
         }
         else
+        {
             bd.cadastrar(os, this);
+        }
+        
+        //Abertura
+        if(textoStatus.getText().equals("Em Abertura") || textoStatus.getText().equals("Em análise"))
+            imprimir("relatorios/OS_Abertura.jasper");
+        //Fechamento"
+        else
+            imprimir("relatorios/OS_Fechamento.jasper");
             
+        limpaTela();  
     }//GEN-LAST:event_botaoSalvarActionPerformed
 
     private void textoStatusMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_textoStatusMouseClicked
@@ -936,6 +1001,27 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
                 this.pagamentoVisible(true, false);
         }
     }//GEN-LAST:event_comboPagamentoItemStateChanged
+
+    private void botaoProcurarActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_botaoProcurarActionPerformed
+    {//GEN-HEADEREND:event_botaoProcurarActionPerformed
+        new ProcuraOS(this, true).setVisible(true);
+    }//GEN-LAST:event_botaoProcurarActionPerformed
+
+    private void botaoApagarActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_botaoApagarActionPerformed
+    {//GEN-HEADEREND:event_botaoApagarActionPerformed
+        new ControladorBancodeDados().apagar(Long.parseLong(textoCodigo.getText()), new OrdemServico(), this);
+        limpaTela();
+    }//GEN-LAST:event_botaoApagarActionPerformed
+
+    private void menuImprimirAberturaActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuImprimirAberturaActionPerformed
+    {//GEN-HEADEREND:event_menuImprimirAberturaActionPerformed
+        imprimir("relatorios/OS_Abertura.jasper");
+    }//GEN-LAST:event_menuImprimirAberturaActionPerformed
+
+    private void menuImprimirFechamentoActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuImprimirFechamentoActionPerformed
+    {//GEN-HEADEREND:event_menuImprimirFechamentoActionPerformed
+        imprimir("relatorios/OS_Fechamento.jasper");
+    }//GEN-LAST:event_menuImprimirFechamentoActionPerformed
 
 
     /*
@@ -1020,7 +1106,7 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
     
     private void pagamentoVisible(boolean campo, boolean parcela)
     {
-        textoParcelas.setText(null);
+        textoParcelas.setText(null);        
         this.labelPagamento.setVisible(campo);
         this.comboPagamento.setVisible(campo);
         this.textoParcelas.setVisible(parcela);
@@ -1240,6 +1326,126 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
             }
         }
     }
+    
+    public void buscaOS(Long codigo)
+    {
+        this.os = new ControladorOS().getOSByCodigo(codigo, this);
+        
+        SimpleDateFormat        sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        
+        DecimalFormat fmt = new DecimalFormat("#,##0.00");   //limita o número de casas decimais
+        
+        String fechamento   = "";
+        String entrega      = "";
+
+        if(os.getFechamento() != null)
+            fechamento = sdf.format(os.getFechamento().getTime());
+        if(os.getEntrega() != null)
+        {
+            entrega = sdf.format(os.getEntrega().getTime());
+            if(os.getPagamento().getPagamento().contains("Crédito"))
+                pagamentoVisible(true, true);
+            else
+                pagamentoVisible(true, false);
+        }
+        
+        textoCodigo.setText(os.getCodigo().toString());
+        textoStatus.setText(os.getStatus());
+        textoAbertura.setText(sdf.format(os.getAbertura().getTime()));
+        textoFechamento.setText(fechamento);
+        textoEntrega.setText(entrega);
+        comboPagamento.setSelectedItem(os.getPagamento().getPagamento());
+        textoParcelas.setText(String.valueOf(os.getParcelasPagamento()));
+        
+        this.getClienteByCodigo(os.getCliente().getCodigo());
+        this.getUsuarioByCodigo(os.getTecnico().getCodigo());
+        comboAtendimento.setSelectedItem(os.getAtendimento().getAtendimento());
+        textoEquipamento.setText(os.getEquipamento());
+        textoModelo.setText(os.getModelo());
+        textoNumeroSerie.setText(os.getNumeroSerie());
+        textoDefeito.setText(os.getDefeito());
+        
+        textoPorcentagemDesconto.setText(String.valueOf(os.getPorcentagemDesconto())+" %");
+        
+        textoObservacoes.setText(os.getObservacao());
+        
+        for(PecasOs peca: os.getPecas())
+        {
+            double total = (peca.getValor() * peca.getQuantidade())-peca.getDesconto();
+            
+            DefaultTableModel modelo = (DefaultTableModel) tabelaPecas.getModel();
+			modelo.addRow(new String[]	{
+											String.valueOf(peca.getPeca().getCodigo()),
+                                            peca.getPeca().getPeca(),
+                                            "R$ "+fmt.format(peca.getValor()),
+                                            String.valueOf(peca.getQuantidade()),
+                                            "R$ "+fmt.format(peca.getDesconto()),
+                                            "R$ "+fmt.format(total)
+										});
+        }
+        
+        for(ServicoOs servico: os.getServicos())
+        {
+            double total = servico.getValor()-servico.getDesconto();
+            
+            DefaultTableModel modelo = (DefaultTableModel) tabelaServicos.getModel();
+			modelo.addRow(new String[]	{
+											String.valueOf(servico.getServico().getCodigo()),
+                                            servico.getServico().getServico(),
+                                            "R$ "+fmt.format(servico.getValor()),
+                                            "R$ "+fmt.format(servico.getDesconto()),
+                                            "R$ "+fmt.format(total)
+										});
+        }
+        
+        somaValores();
+    }
+    
+    private void limpaTela()
+    {
+        SimpleDateFormat        sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        
+        this.cliente    = null;
+        this.os         = null;
+        
+        textoCodigo.setText("** NOVO **");
+        alteraStatus();
+        comboPagamento.setSelectedIndex(-1);
+        this.pagamentoVisible(false, false); 
+        
+        textoCliente.setText("");
+        textoTecnico.setText("");
+        comboAtendimento.setSelectedIndex(-1);
+        
+        textoEquipamento.setText("");
+        textoModelo.setText("");
+        textoNumeroSerie.setText("");
+        textoDefeito.setText("");
+        
+        textoPorcentagemDesconto.setText("0 %");
+        
+        textoObservacoes.setText("");
+        
+        ControladorTabelas.apagaTabela(tabelaPecas);
+        ControladorTabelas.apagaTabela(tabelaServicos);
+        
+        somaValores();
+    }
+    
+    private void imprimir(String relatorio)
+    {
+        try
+        {
+            ControladorRelatorios   relatorios = new ControladorRelatorios();
+            HashMap                 parametros = new HashMap();
+            parametros.put("Cod", os.getCodigo());
+            relatorios.geraRelatorios(relatorio, parametros);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(this, "Erro ao imprimir!\nPor favor salve primeiro.", "Erro", JOptionPane.INFORMATION_MESSAGE, new ImageIcon("img/error-circle.png"));
+        }
+    }
 
 
     /**
@@ -1311,12 +1517,16 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel labelPagamento;
+    private javax.swing.JMenu menuImprimir;
+    private javax.swing.JMenuItem menuImprimirAbertura;
+    private javax.swing.JMenuItem menuImprimirFechamento;
     private javax.swing.JPanel painelObservacoes;
     private javax.swing.JPanel painelPeças;
     private javax.swing.JPanel painelServicos;

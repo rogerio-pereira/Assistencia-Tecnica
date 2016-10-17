@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OS_Fechamento_Pecas" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="cf7292cc-1981-432d-9476-b9178d0f982d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="Cod" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT
+     ServicoOs.`desconto` AS ServicoOs_desconto,
+     ServicoOs.`valor` AS ServicoOs_valor,
+     Servicos.`servico` AS Servicos_servico,
+     Servicos.`codigo` AS Servicos_codigo
+FROM
+     `OrdemServico` OrdemServico INNER JOIN `OrdemServico_ServicoOs` OrdemServico_ServicoOs ON OrdemServico.`codigo` = OrdemServico_ServicoOs.`OrdemServico_codigo`
+     INNER JOIN `ServicoOs` ServicoOs ON OrdemServico_ServicoOs.`servicos_codigo` = ServicoOs.`codigo`
+     INNER JOIN `Servicos` Servicos ON ServicoOs.`servico_codigo` = Servicos.`codigo`
+where OrdemServico.codigo = $P{Cod}]]>
+	</queryString>
+	<field name="ServicoOs_desconto" class="java.lang.Double"/>
+	<field name="ServicoOs_valor" class="java.lang.Double"/>
+	<field name="Servicos_servico" class="java.lang.String"/>
+	<field name="Servicos_codigo" class="java.lang.Long"/>
+	<variable name="totalCol" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{ServicoOs_valor} - $F{ServicoOs_desconto}]]></variableExpression>
+	</variable>
+	<variable name="total" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$V{totalCol}]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20">
+			<staticText>
+				<reportElement x="0" y="0" width="556" height="20" uuid="c1155d05-a210-4ee2-968f-bddfbe494978"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Serviços]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="59" height="20" uuid="4dcee7dc-d72d-4710-a69a-c8477f1efd88"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Codigo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="59" y="0" width="193" height="20" uuid="c76e513a-dc01-4c0e-9a13-eef3d0863bfa"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Serviço]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="253" y="0" width="99" height="20" uuid="73490a3a-2a7d-420a-9704-b432801a069f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Valor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="352" y="0" width="100" height="20" uuid="d810207e-077e-4abd-9414-11dd04020142"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Desconto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="452" y="0" width="103" height="20" uuid="09b269a7-bf4c-4dde-bcf5-a90c09be7376"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="556" height="20" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="54e154b1-7335-465e-b75d-6099b0c4ab96">
+					<printWhenExpression><![CDATA[$V{REPORT_COUNT}%2 == 1]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<textField>
+				<reportElement x="452" y="0" width="103" height="20" uuid="df15e209-7840-4ceb-ba78-5c9068cd387a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{totalCol})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="252" y="0" width="100" height="20" uuid="d69c15e2-751e-42fe-946f-829b060591eb"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{ServicoOs_valor})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="352" y="0" width="100" height="20" uuid="19c621f8-95fd-442b-b664-5e259a043f9b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{ServicoOs_desconto})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="59" height="20" uuid="c2e461e5-2776-4f4e-877f-760ac3763563"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Servicos_codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="59" y="0" width="193" height="20" uuid="d7405e0e-af80-432a-a8d3-eaae5720c1af"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Servicos_servico}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="20">
+			<rectangle>
+				<reportElement x="452" y="0" width="104" height="20" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="1496e547-f5a9-458d-969c-274ab52d9ce3"/>
+			</rectangle>
+			<textField>
+				<reportElement x="452" y="0" width="103" height="20" uuid="10daee3f-debd-4881-80ef-62b8f4b02394"/>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{total})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="411" y="0" width="41" height="20" uuid="0d1b4507-20e8-4ad7-9aaf-d0464eb7992f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+</jasperReport>

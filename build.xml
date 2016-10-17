@@ -106,5 +106,13 @@
     <copy todir="dist\util">
         <fileset dir="util"/>
     </copy>
+
+    <!--Imagens-->
+    <copy todir="img">
+        <fileset dir="src\img"/>
+    </copy>
+    <copy todir="dist\img">
+        <fileset dir="img"/>
+    </copy>
   </target> 
 </project>

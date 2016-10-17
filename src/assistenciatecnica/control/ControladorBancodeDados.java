@@ -24,6 +24,8 @@ package assistenciatecnica.control;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -166,13 +168,13 @@ public class ControladorBancodeDados
 	 */
 	public HashMap getConfigBD()
 	{
-		Map			cfg		= new HashMap();
+		Map			cfg         = new HashMap();
 		Properties	prop		= new Properties();
-		InputStream	input	= null;
+		InputStream	input       = null;
 		String		show_sql	= new String();
 		String		user		= new String();
 		String		password	= new String();
-		String		server	= new String();
+		String		server      = new String();
 		String		port		= new String();
 		String		database	= new String();
 		
@@ -219,8 +221,44 @@ public class ControladorBancodeDados
 		
 		return (HashMap)cfg;
 	}
+    
+    public Connection getConexaoReport()
+	{
+		Properties	prop		= new Properties();
+		InputStream	input       = null;
+		String		user		= new String();
+		String		password	= new String();
+		String		server      = new String();
+		String		port		= new String();
+		String		database	= new String();
+		
+		try
+		{
+			//Abre arquivo de configurações
+			input = new FileInputStream("config/bd.config.properties");
+			
+			//Obtem as informações do arquivo
+			prop.load(input);
+			
+			//Seta as propriedades
+			user		= prop.getProperty("user");
+			password	= prop.getProperty("password");
+			server      = prop.getProperty("server");
+			port		= prop.getProperty("port");
+			database	= prop.getProperty("database");
+			
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conexao = null;
+			conexao = DriverManager.getConnection("jdbc:mysql://"+server+":"+port+"/"+database+"",user, password);
+			return conexao;
+		}
+		catch(Exception e)
+		{
+			return null;
+		}
+	}
 	
-	private Map					config;
-	private EntityManagerFactory		factory;
+	private Map                     config;
+	private EntityManagerFactory	factory;
 	private EntityManager			manager;
 }

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OS_Fechamento_Pecas" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="cf7292cc-1981-432d-9476-b9178d0f982d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="Cod" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT
+     PecasOs.`desconto` AS PecasOs_desconto,
+     PecasOs.`quantidade` AS PecasOs_quantidade,
+     PecasOs.`valor` AS PecasOs_valor,
+     Pecas.`codigo` AS Pecas_codigo,
+     Pecas.`peca` AS Pecas_peca
+FROM
+     `OrdemServico` OrdemServico INNER JOIN `OrdemServico_PecasOs` OrdemServico_PecasOs ON OrdemServico.`codigo` = OrdemServico_PecasOs.`OrdemServico_codigo`
+     INNER JOIN `PecasOs` PecasOs ON OrdemServico_PecasOs.`pecas_codigo` = PecasOs.`codigo`
+     INNER JOIN `Pecas` Pecas ON PecasOs.`peca_codigo` = Pecas.`codigo`
+where OrdemServico.codigo = $P{Cod}]]>
+	</queryString>
+	<field name="PecasOs_desconto" class="java.lang.Double"/>
+	<field name="PecasOs_quantidade" class="java.lang.Integer"/>
+	<field name="PecasOs_valor" class="java.lang.Double"/>
+	<field name="Pecas_codigo" class="java.lang.Long"/>
+	<field name="Pecas_peca" class="java.lang.String"/>
+	<variable name="totalCol" class="java.lang.Double">
+		<variableExpression><![CDATA[($F{PecasOs_valor} * $F{PecasOs_quantidade}) - $F{PecasOs_desconto}]]></variableExpression>
+	</variable>
+	<variable name="total" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$V{totalCol}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20">
+			<staticText>
+				<reportElement x="0" y="0" width="556" height="20" uuid="e4a6ff21-a5f0-4174-a5ee-49a99489abdf"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Peças]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="59" height="20" uuid="4dcee7dc-d72d-4710-a69a-c8477f1efd88"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Codigo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="59" y="0" width="166" height="20" uuid="c76e513a-dc01-4c0e-9a13-eef3d0863bfa"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Peça]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="253" y="0" width="99" height="20" uuid="73490a3a-2a7d-420a-9704-b432801a069f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Valor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="223" y="0" width="30" height="20" uuid="76e97529-be15-46cc-a75d-4062dfb4a28a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Qtd]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="352" y="0" width="100" height="20" uuid="d810207e-077e-4abd-9414-11dd04020142"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Desconto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="452" y="0" width="103" height="20" uuid="09b269a7-bf4c-4dde-bcf5-a90c09be7376"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="556" height="20" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="7fbe4629-4be5-4dfb-9e70-13a9e7bc4b20">
+					<printWhenExpression><![CDATA[$V{REPORT_COUNT}%2 == 1]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="0" width="59" height="20" uuid="d748d07a-2cf2-43c7-8cb0-da2ed8652458"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Pecas_codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="59" y="0" width="166" height="20" uuid="6d289719-5fb4-463d-869a-6f3ae7371290"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Pecas_peca}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="223" y="0" width="30" height="20" uuid="39eb97f4-727e-4260-ad75-d309b0e22729"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PecasOs_quantidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="352" y="0" width="100" height="20" uuid="043ef26d-5395-46ac-bba8-eb1caa23ae9a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{PecasOs_desconto})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="252" y="0" width="100" height="20" uuid="00b3429c-08eb-4d7d-9f80-0128913db064"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{PecasOs_valor})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="452" y="0" width="103" height="20" uuid="91a6dc08-2fc1-4229-b93f-77a944ce4825"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{totalCol})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="20">
+			<rectangle>
+				<reportElement x="452" y="0" width="104" height="20" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="56fefb1c-5370-4cfc-8e6b-2e3eb4cdf60b"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="411" y="0" width="41" height="20" uuid="1d0910c8-c9aa-4fe7-8391-5e9e87f972ab"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="452" y="0" width="103" height="20" uuid="5ece1b82-a154-4a2a-8b30-e82b420b3272"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($V{total})]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+</jasperReport>
