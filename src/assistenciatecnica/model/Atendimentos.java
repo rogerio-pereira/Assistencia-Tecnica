@@ -38,8 +38,9 @@ import javax.persistence.NamedQuery;
 @Entity
 @NamedQueries
 ({
-	@NamedQuery(name = "Atendimento.findAll",	query = "SELECT atendimento FROM Atendimentos  a ORDER BY a.atendimento ASC"),
-	@NamedQuery(name = "Atendimento.findOne",	query = "SELECT a.codigo FROM Atendimentos a WHERE a.atendimento = ?0")
+	@NamedQuery(name = "Atendimento.findAll",	query = "SELECT a.atendimento FROM Atendimentos  a ORDER BY a.atendimento ASC"),
+	@NamedQuery(name = "Atendimento.findOne",	query = "SELECT a.codigo FROM Atendimentos a WHERE a.atendimento = ?0"),
+	@NamedQuery(name = "Atendimento.findName",	query = "SELECT a FROM Atendimentos a WHERE a.atendimento = ?0")
 })
 public class Atendimentos 
 {

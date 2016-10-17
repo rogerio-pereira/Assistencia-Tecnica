@@ -324,10 +324,14 @@ public class CadastroFornecedores extends javax.swing.JFrame implements KeyListe
 			this.textoRG.setText(this.fornecedor.getRg());
 			this.textoCPF.setText(this.fornecedor.getCpf());
 			this.textoNascimento.setCalendar(this.fornecedor.getNascimento());
-			if(this.fornecedor.getSexo() == true)
-				this.radioMasculino.doClick();
-			else if(this.fornecedor.getSexo() == false)
-				this.radioFeminino.doClick();
+            try
+            {
+                if(this.fornecedor.getSexo() == true)
+                    this.radioMasculino.doClick();
+                else if(this.fornecedor.getSexo() == false)
+                    this.radioFeminino.doClick();
+            }
+            catch(Exception e){}
 		}
 		else if(this.fornecedor.getPessoa() == false)
 		{

@@ -3,12 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/farofa/Desktop/AssistenciaTecnica/src/assistenciatecnica/control/ControladorBancodeDados.java</file>
-            <file>file:/home/farofa/Desktop/AssistenciaTecnica/src/assistenciatecnica/view/Principal.java</file>
-            <file>file:/home/farofa/Desktop/AssistenciaTecnica/src/assistenciatecnica/control/CriaTabelas.java</file>
-            <file>file:/home/farofa/Desktop/AssistenciaTecnica/src/assistenciatecnica/view/CadastroAtendimentos.java</file>
-            <file>file:/home/farofa/Desktop/AssistenciaTecnica/src/META-INF/persistence.xml</file>
-            <file>file:/home/farofa/Desktop/AssistenciaTecnica/src/assistenciatecnica/view/OrdemDeServico.java</file>
+            <file>file:/home/farofa/Documents/NetBeansProjects/AssistenciaTecnica/src/assistenciatecnica/view/OrdemDeServico.java</file>
         </group>
     </open-files>
 </project-private>

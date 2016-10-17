@@ -41,7 +41,8 @@ import javax.persistence.NamedQuery;
 ({
 	@NamedQuery(name="Usuario.login",		query = "SELECT u FROM Usuario u WHERE usuario = ?1"),
 	@NamedQuery(name="Usuario.findAll",		query = "SELECT u FROM Usuario u ORDER BY u.nome ASC"),
-	@NamedQuery(name="Usuario.findOne",	query = "SELECT u.codigo FROM Usuario u WHERE u.usuario = ?0")
+	@NamedQuery(name="Usuario.findOne",     query = "SELECT u.codigo FROM Usuario u WHERE u.usuario = ?0"),
+	@NamedQuery(name="Usuario.findName",	query = "SELECT u FROM Usuario u WHERE u.usuario LIKE ?0 AND u.nome LIKE ?0 AND u.usuario <> 'SUPORTE'")
 })
 @Entity
 public class Usuario

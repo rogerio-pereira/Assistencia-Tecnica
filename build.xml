@@ -71,35 +71,40 @@
 
     -->
 	<target name="-post-jar"> 
-		<copy
-			file="util\mysqldump.exe"
-			flatten="true"
-			todir="dist\util"
-		/>
-		<copy
-			file="util\mysql.exe"
-			flatten="true"
-			todir="dist\util"
-		/>
-		<copy
-			file="config\bd.config.properties"
-			flatten="true"
-			todir="dist\config"
-		/>
-		<copy
-			file="LICENSE\license.html"
-			flatten="true"
-			todir="dist\LICENSE"
-		/>
-		<copy
-			file="src\assistenciatecnica\view\img\accept-grande.png"
-			flatten="true"
-			todir="dist\img\"
-		/>
-		<copy
-			file="src\assistenciatecnica\view\img\error-circle.png"
-			flatten="true"
-			todir="dist\img\"
-		/>
-    </target> 
+    <!--Configurações-->
+    <copy todir="config">
+        <fileset dir="src\config"/>
+    </copy>
+    <copy todir="dist\config">
+        <fileset dir="config"/>
+    </copy>
+
+    <!--Licença-->
+    <copy todir="LICENSE">
+        <fileset dir="src\LICENSE"/>
+    </copy>
+    <copy todir="dist\LICENSE">
+        <fileset dir="LICENSE"/>
+    </copy>
+
+    <!--Relatorios-->
+    <copy todir="relatorios">
+        <fileset dir="src\relatorios">
+            <include name="**\*.jasper"/>
+            <exclude name="**\ModeloRetrato.jasper"/>
+            <exclude name="**\ModeloPaisagem.jasper"/>
+        </fileset>
+    </copy>    
+    <copy todir="dist\relatorios">
+        <fileset dir="relatorios"/>
+    </copy>
+
+    <!--Util Mysql-->
+    <copy todir="util">
+        <fileset dir="src\util"/>
+    </copy>
+    <copy todir="dist\util">
+        <fileset dir="util"/>
+    </copy>
+  </target> 
 </project>

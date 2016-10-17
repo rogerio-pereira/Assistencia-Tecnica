@@ -92,6 +92,7 @@ public class Principal extends javax.swing.JFrame implements KeyListener, Contai
         MenuEmpresaServicos = new javax.swing.JMenuItem();
         MenuEmpresaPecas = new javax.swing.JMenuItem();
         MenuEmpresaAtendimentos = new javax.swing.JMenuItem();
+        MenuEmpresaPagamentos = new javax.swing.JMenuItem();
         MenuSobre = new javax.swing.JMenu();
         MenuSobreAparencia = new javax.swing.JMenuItem();
         MenuSobreSobre = new javax.swing.JMenuItem();
@@ -103,7 +104,6 @@ public class Principal extends javax.swing.JFrame implements KeyListener, Contai
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Assistencia Técnica");
-        setPreferredSize(new java.awt.Dimension(800, 600));
 
         painelBotões.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         painelBotões.setPreferredSize(new java.awt.Dimension(762, 32));
@@ -160,6 +160,13 @@ public class Principal extends javax.swing.JFrame implements KeyListener, Contai
         botaoRecibo.setPreferredSize(new java.awt.Dimension(71, 59));
         botaoRecibo.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         botaoRecibo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        botaoRecibo.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                botaoReciboActionPerformed(evt);
+            }
+        });
 
         botaoSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assistenciatecnica/view/img/system-shutdown-6.png"))); // NOI18N
         botaoSair.setText("Sair");
@@ -198,13 +205,12 @@ public class Principal extends javax.swing.JFrame implements KeyListener, Contai
             painelBotõesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelBotõesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(painelBotõesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(botaoClientes)
-                    .addGroup(painelBotõesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(botaoSair, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
-                        .addComponent(botaoOS, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(botaoRecibo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(botaoPecas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(painelBotõesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(botaoSair, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(botaoOS, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(botaoRecibo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(botaoPecas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(botaoClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(8, Short.MAX_VALUE))
         );
 
@@ -362,6 +368,17 @@ public class Principal extends javax.swing.JFrame implements KeyListener, Contai
             }
         });
         MenuEmpresa.add(MenuEmpresaAtendimentos);
+
+        MenuEmpresaPagamentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assistenciatecnica/view/img/creditcards.png"))); // NOI18N
+        MenuEmpresaPagamentos.setText("Pagamentos");
+        MenuEmpresaPagamentos.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                MenuEmpresaPagamentosActionPerformed(evt);
+            }
+        });
+        MenuEmpresa.add(MenuEmpresaPagamentos);
 
         jMenuBar1.add(MenuEmpresa);
 
@@ -546,13 +563,26 @@ public class Principal extends javax.swing.JFrame implements KeyListener, Contai
 
     private void botaoPecasActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_botaoPecasActionPerformed
     {//GEN-HEADEREND:event_botaoPecasActionPerformed
-        // TODO add your handling code here:
+        CadastroPecas cp = new CadastroPecas();
+		cp.setVisible(true);
     }//GEN-LAST:event_botaoPecasActionPerformed
 
     private void botaoOSActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_botaoOSActionPerformed
     {//GEN-HEADEREND:event_botaoOSActionPerformed
-        // TODO add your handling code here:
+        OrdemDeServico os = new OrdemDeServico();
+		os.setVisible(true);
     }//GEN-LAST:event_botaoOSActionPerformed
+
+    private void botaoReciboActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_botaoReciboActionPerformed
+    {//GEN-HEADEREND:event_botaoReciboActionPerformed
+        Recibos recibos = new Recibos();
+		recibos.setVisible(true);
+    }//GEN-LAST:event_botaoReciboActionPerformed
+
+    private void MenuEmpresaPagamentosActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuEmpresaPagamentosActionPerformed
+    {//GEN-HEADEREND:event_MenuEmpresaPagamentosActionPerformed
+        new CadastroPagamentos().setVisible(true);
+    }//GEN-LAST:event_MenuEmpresaPagamentosActionPerformed
 
 
     /*
@@ -665,6 +695,7 @@ public class Principal extends javax.swing.JFrame implements KeyListener, Contai
     private javax.swing.JMenu MenuEmpresa;
     private javax.swing.JMenuItem MenuEmpresaAtendimentos;
     private javax.swing.JMenuItem MenuEmpresaDadosEmpresa;
+    private javax.swing.JMenuItem MenuEmpresaPagamentos;
     private javax.swing.JMenuItem MenuEmpresaPecas;
     private javax.swing.JMenuItem MenuEmpresaServicos;
     private javax.swing.JMenuItem MenuEmpresaUsuarios;

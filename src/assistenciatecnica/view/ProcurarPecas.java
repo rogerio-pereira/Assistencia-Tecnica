@@ -77,7 +77,7 @@ public class ProcurarPecas extends javax.swing.JFrame implements KeyListener, Co
         btoaoCancelar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tabelaServicos = new javax.swing.JTable();
+        tabelaPecas = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Procurar Peças");
@@ -140,7 +140,7 @@ public class ProcurarPecas extends javax.swing.JFrame implements KeyListener, Co
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(95, 133, 169), null), "Resultado", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP));
 
-        tabelaServicos.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaPecas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
             {
 
@@ -161,8 +161,8 @@ public class ProcurarPecas extends javax.swing.JFrame implements KeyListener, Co
                 return canEdit [columnIndex];
             }
         });
-        tabelaServicos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        jScrollPane1.setViewportView(tabelaServicos);
+        tabelaPecas.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        jScrollPane1.setViewportView(tabelaPecas);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -231,13 +231,18 @@ public class ProcurarPecas extends javax.swing.JFrame implements KeyListener, Co
 
     private void botaoSelecionarActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_botaoSelecionarActionPerformed
     {//GEN-HEADEREND:event_botaoSelecionarActionPerformed
-		if(tabelaServicos.getSelectedRow() != -1)
+		if(tabelaPecas.getSelectedRow() != -1)
 		{
 			if(janela.getTitle() == "Cadastro de Peças")
 			{
 				janelaCadastroPecas = (CadastroPecas) janela;
 				janelaCadastroPecas.limpaTela();
-				janelaCadastroPecas.getPecaByCodigo(Long.parseLong(tabelaServicos.getValueAt(tabelaServicos.getSelectedRow(), 0).toString()));
+				janelaCadastroPecas.getPecaByCodigo(Long.parseLong(tabelaPecas.getValueAt(tabelaPecas.getSelectedRow(), 0).toString()));
+			}
+            else if(janela.getTitle() == "Ordem de Serviço")
+			{
+				janelaOrdemDeServico = (OrdemDeServico) janela;
+				janelaOrdemDeServico.insertProduto(Long.parseLong(tabelaPecas.getValueAt(tabelaPecas.getSelectedRow(), 0).toString()));
 			}
 
 			this.dispose();
@@ -307,11 +312,11 @@ public class ProcurarPecas extends javax.swing.JFrame implements KeyListener, Co
 	{
 		DefaultTableCellRenderer alinhamento = new DefaultTableCellRenderer();
 		alinhamento.setHorizontalAlignment(SwingConstants.LEFT);
-		this.tabelaServicos.getColumnModel().getColumn(0).setCellRenderer(alinhamento);
+		this.tabelaPecas.getColumnModel().getColumn(0).setCellRenderer(alinhamento);
 		
-		this.tabelaServicos.getColumnModel().getColumn(0).setPreferredWidth(80); 
-		this.tabelaServicos.getColumnModel().getColumn(1).setPreferredWidth(165); 
-		this.tabelaServicos.getColumnModel().getColumn(2).setPreferredWidth(70); 
+		this.tabelaPecas.getColumnModel().getColumn(0).setPreferredWidth(80); 
+		this.tabelaPecas.getColumnModel().getColumn(1).setPreferredWidth(165); 
+		this.tabelaPecas.getColumnModel().getColumn(2).setPreferredWidth(70); 
 	}
 	
 	/*
@@ -320,7 +325,7 @@ public class ProcurarPecas extends javax.swing.JFrame implements KeyListener, Co
 	 */
 	private void apagaTabela()
 	{
-		new ControladorTabelas().apagaTabela(this.tabelaServicos);
+		ControladorTabelas.apagaTabela(this.tabelaPecas);
 	}
 	
 	/*
@@ -333,7 +338,7 @@ public class ProcurarPecas extends javax.swing.JFrame implements KeyListener, Co
 		
 		for(Pecas peca: lista)
 		{
-			DefaultTableModel modelo = (DefaultTableModel) this.tabelaServicos.getModel();
+			DefaultTableModel modelo = (DefaultTableModel) this.tabelaPecas.getModel();
 			modelo.addRow(new String[]	{
 										peca.getCodigo().toString(),
 										peca.getPeca(),
@@ -392,11 +397,12 @@ public class ProcurarPecas extends javax.swing.JFrame implements KeyListener, Co
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tabelaServicos;
+    private javax.swing.JTable tabelaPecas;
     private javax.swing.JTextField textoNome;
     // End of variables declaration//GEN-END:variables
 	private ControladorPeca		control;
 	private List<Pecas>		pecas;
 	private JFrame				janela;
 	private CadastroPecas		janelaCadastroPecas;
+    private OrdemDeServico		janelaOrdemDeServico;
 }

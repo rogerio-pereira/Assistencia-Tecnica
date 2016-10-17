@@ -22,6 +22,7 @@
 package assistenciatecnica.control;
 
 
+import assistenciatecnica.model.Atendimentos;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -49,7 +50,7 @@ public class ControladorAtendimentos
 																);
 		this.manager			= factory.createEntityManager();
 		
-		Query query			= manager.createNamedQuery("Atendimento.findAll");
+		Query query             = manager.createNamedQuery("Atendimento.findAll");
 		this.atendimentoString	= query.getResultList();
 		
 		return this.atendimentoString;
@@ -75,9 +76,29 @@ public class ControladorAtendimentos
 		
 		return this.codigo;
 	}
+    
+    /*
+	 * Método getAtendimentoByNome
+	 * Obtem o atendimento pelo nome
+	 */
+	public Atendimentos getAtendimentoByNome(String nome)
+	{
+		this.factory	= Persistence.createEntityManagerFactory	(	
+                                                                        "assistenciaTecnica", 
+                                                                        new ControladorBancodeDados().getConfigBD()
+                                                                    );
+		this.manager	= factory.createEntityManager();
+		
+		Query query	= manager.createNamedQuery("Atendimento.findName");
+		query.setParameter(0, nome);
+		this.atendimento	= (Atendimentos) query.getSingleResult();
+		
+		return atendimento;
+	}
 	
-	private EntityManagerFactory		factory;
+	private EntityManagerFactory    factory;
 	private EntityManager			manager;
 	private List<String>			atendimentoString;
 	private Long					codigo;
+    private Atendimentos            atendimento;
 }

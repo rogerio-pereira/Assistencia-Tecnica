@@ -22,6 +22,7 @@
 package assistenciatecnica.model;
 
 
+import java.util.Calendar;
 import java.util.Collection;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,6 +30,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 
 /**
@@ -43,8 +48,24 @@ public class OrdemServico
 	@GeneratedValue
 	private Long codigo;
 	
-	@Column(nullable = false)
-	private int status;
+	@Column(nullable = false, length = 12)
+	private String status;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar abertura;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = true)
+    private Calendar fechamento;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = true)
+    private Calendar entrega;
+    
+    @OneToOne
+    private Pagamentos pagamento;
+    
+    private int parcelasPagamento;
 	
 	@OneToOne
 	private Clientes cliente;
@@ -68,162 +89,233 @@ public class OrdemServico
 	private String defeito;
 	
 	@OneToMany
+    @Cascade(CascadeType.ALL)
 	private Collection<PecasOs> pecas;
 	
 	@OneToMany
+    @Cascade(CascadeType.ALL)
 	private Collection<ServicoOs> servicos;
-	
-	@OneToMany
-	private Collection<PagamentosOs> Pagamentos;
 	
 	@Column(length=999999999)
 	private String observacao;
+    
+    private double valor;
+    
+    private double desconto;
+    
+    private double porcentagemDesconto;
+    
+    private double valorFinal;
+    
+    public Long getCodigo()
+    {
+        return codigo;
+    }
 
+    public void setCodigo(Long codigo)
+    {
+        this.codigo = codigo;
+    }
 
-	public Long getCodigo ()
-	{
-		return codigo;
-	}
+    public String getStatus()
+    {
+        return status;
+    }
 
+    public void setStatus(String status)
+    {
+        this.status = status;
+    }
 
-	public void setCodigo (Long codigo)
-	{
-		this.codigo = codigo;
-	}
+    public Calendar getAbertura()
+    {
+        return abertura;
+    }
 
+    public void setAbertura(Calendar abertura)
+    {
+        this.abertura = abertura;
+    }
 
-	public int getStatus ()
-	{
-		return status;
-	}
+    public Calendar getFechamento()
+    {
+        return fechamento;
+    }
 
+    public void setFechamento(Calendar fechamento)
+    {
+        this.fechamento = fechamento;
+    }
 
-	public void setStatus (int status)
-	{
-		this.status = status;
-	}
+    public Calendar getEntrega()
+    {
+        return entrega;
+    }
 
+    public void setEntrega(Calendar entrega)
+    {
+        this.entrega = entrega;
+    }
 
-	public Clientes getCliente ()
-	{
-		return cliente;
-	}
+    public Pagamentos getPagamento()
+    {
+        return pagamento;
+    }
 
+    public void setPagamento(Pagamentos pagamento)
+    {
+        this.pagamento = pagamento;
+    }
 
-	public void setCliente (Clientes cliente)
-	{
-		this.cliente = cliente;
-	}
+    public int getParcelasPagamento()
+    {
+        return parcelasPagamento;
+    }
 
+    public void setParcelasPagamento(int parcelasPagamento)
+    {
+        this.parcelasPagamento = parcelasPagamento;
+    }
 
-	public Usuario getTecnico ()
-	{
-		return tecnico;
-	}
+    public Clientes getCliente()
+    {
+        return cliente;
+    }
 
+    public void setCliente(Clientes cliente)
+    {
+        this.cliente = cliente;
+    }
 
-	public void setTecnico (Usuario tecnico)
-	{
-		this.tecnico = tecnico;
-	}
+    public Usuario getTecnico()
+    {
+        return tecnico;
+    }
 
+    public void setTecnico(Usuario tecnico)
+    {
+        this.tecnico = tecnico;
+    }
 
-	public String getEquipamento ()
-	{
-		return equipamento;
-	}
+    public Atendimentos getAtendimento()
+    {
+        return atendimento;
+    }
 
+    public void setAtendimento(Atendimentos atendimento)
+    {
+        this.atendimento = atendimento;
+    }
 
-	public void setEquipamento (String equipamento)
-	{
-		this.equipamento = equipamento;
-	}
+    public String getEquipamento()
+    {
+        return equipamento;
+    }
 
+    public void setEquipamento(String equipamento)
+    {
+        this.equipamento = equipamento;
+    }
 
-	public String getModelo ()
-	{
-		return modelo;
-	}
+    public String getModelo()
+    {
+        return modelo;
+    }
 
+    public void setModelo(String modelo)
+    {
+        this.modelo = modelo;
+    }
 
-	public void setModelo (String modelo)
-	{
-		this.modelo = modelo;
-	}
+    public String getNumeroSerie()
+    {
+        return numeroSerie;
+    }
 
+    public void setNumeroSerie(String numeroSerie)
+    {
+        this.numeroSerie = numeroSerie;
+    }
 
-	public String getNumeroSerie ()
-	{
-		return numeroSerie;
-	}
+    public String getDefeito()
+    {
+        return defeito;
+    }
 
+    public void setDefeito(String defeito)
+    {
+        this.defeito = defeito;
+    }
 
-	public void setNumeroSerie (String numeroSerie)
-	{
-		this.numeroSerie = numeroSerie;
-	}
+    public Collection<PecasOs> getPecas()
+    {
+        return pecas;
+    }
 
+    public void setPecas(Collection<PecasOs> pecas)
+    {
+        this.pecas = pecas;
+    }
 
-	public String getDefeito ()
-	{
-		return defeito;
-	}
+    public Collection<ServicoOs> getServicos()
+    {
+        return servicos;
+    }
 
+    public void setServicos(Collection<ServicoOs> servicos)
+    {
+        this.servicos = servicos;
+    }
 
-	public void setDefeito (String defeito)
-	{
-		this.defeito = defeito;
-	}
+    public String getObservacao()
+    {
+        return observacao;
+    }
 
+    public void setObservacao(String observacao)
+    {
+        this.observacao = observacao;
+    }
 
-	public Collection<PecasOs> getPecas ()
-	{
-		return pecas;
-	}
+    public double getValor()
+    {
+        return valor;
+    }
 
+    public void setValor(double valor)
+    {
+        this.valor = valor;
+    }
 
-	public void setPecas (Collection<PecasOs> pecas)
-	{
-		this.pecas = pecas;
-	}
+    public double getDesconto()
+    {
+        return desconto;
+    }
 
+    public void setDesconto(double desconto)
+    {
+        this.desconto = desconto;
+    }
 
-	public Collection<ServicoOs> getServicos ()
-	{
-		return servicos;
-	}
+    public double getPorcentagemDesconto()
+    {
+        return porcentagemDesconto;
+    }
 
+    public void setPorcentagemDesconto(double porcentagemDesconto)
+    {
+        this.porcentagemDesconto = porcentagemDesconto;
+    }
 
-	public void setServicos (Collection<ServicoOs> servicos)
-	{
-		this.servicos = servicos;
-	}
+    public double getValorFinal()
+    {
+        return valorFinal;
+    }
 
-
-	public Collection<PagamentosOs> getPagamentos ()
-	{
-		return Pagamentos;
-	}
-
-
-	public void setPagamentos (Collection<PagamentosOs> Pagamentos)
-	{
-		this.Pagamentos = Pagamentos;
-	}
-	
-	
-
-
-	public String getObservacao ()
-	{
-		return observacao;
-	}
-
-
-	public void setObservacao (String observacao)
-	{
-		this.observacao = observacao;
-	}
-	
-	
+    public void setValorFinal(double valorFinal)
+    {
+        this.valorFinal = valorFinal;
+    }
+    
+    
 }

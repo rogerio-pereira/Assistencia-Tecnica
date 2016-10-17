@@ -144,7 +144,6 @@ public class Recibos extends javax.swing.JFrame implements KeyListener, Containe
         jPanel1 = new javax.swing.JPanel();
         labelRecebemos = new javax.swing.JLabel();
         textoCliente = new javax.swing.JTextField();
-        botaoPesquisarCliente = new javax.swing.JButton();
         labelImportancia = new javax.swing.JLabel();
         labelReferente = new javax.swing.JLabel();
         painelReferente = new javax.swing.JScrollPane();
@@ -161,6 +160,7 @@ public class Recibos extends javax.swing.JFrame implements KeyListener, Containe
         labelComplemento = new javax.swing.JLabel();
         textoComplemento = new javax.swing.JTextField();
         textoValor = new formattedFields.jTextMoeda();
+        botaoProcurarCliente = new javax.swing.JButton();
         botaoGerarRecibo = new javax.swing.JButton();
         botaoLimparRecibo = new javax.swing.JButton();
 
@@ -174,15 +174,6 @@ public class Recibos extends javax.swing.JFrame implements KeyListener, Containe
 
         textoCliente.setEditable(false);
         textoCliente.setFocusable(false);
-
-        botaoPesquisarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/estudiofotografico/view/img/procurarCliente.png"))); // NOI18N
-        botaoPesquisarCliente.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                botaoPesquisarClienteActionPerformed(evt);
-            }
-        });
 
         labelImportancia.setText("A Importância de: ");
 
@@ -214,6 +205,15 @@ public class Recibos extends javax.swing.JFrame implements KeyListener, Containe
 
         labelComplemento.setText("Complemento");
 
+        botaoProcurarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assistenciatecnica/view/img/edit-user-green_menor_buscar.png"))); // NOI18N
+        botaoProcurarCliente.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                botaoProcurarClienteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -234,31 +234,33 @@ public class Recibos extends javax.swing.JFrame implements KeyListener, Containe
                     .addComponent(textoComplemento, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
                     .addComponent(painelReferente, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(textoData, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(textoMunicipio)
-                                .addComponent(textoNomeAssinatura)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(textoData, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(textoMunicipio)
+                            .addComponent(textoNomeAssinatura)
+                            .addComponent(painelObs, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(textoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(botaoPesquisarCliente))
-                                .addComponent(painelObs))
-                            .addComponent(textoValor, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(textoValor, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(botaoProcurarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelRecebemos)
-                    .addComponent(textoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botaoPesquisarCliente))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(labelImportancia)
-                    .addComponent(textoValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(labelRecebemos)
+                            .addComponent(textoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(labelImportancia)
+                            .addComponent(textoValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(botaoProcurarCliente))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(labelReferente)
@@ -286,7 +288,7 @@ public class Recibos extends javax.swing.JFrame implements KeyListener, Containe
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
-        botaoGerarRecibo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/estudiofotografico/view/img/money_add.png"))); // NOI18N
+        botaoGerarRecibo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assistenciatecnica/view/img/money-add.png"))); // NOI18N
         botaoGerarRecibo.setText("Gerar Recibo");
         botaoGerarRecibo.addActionListener(new java.awt.event.ActionListener()
         {
@@ -296,7 +298,7 @@ public class Recibos extends javax.swing.JFrame implements KeyListener, Containe
             }
         });
 
-        botaoLimparRecibo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/estudiofotografico/view/img/money_delete.png"))); // NOI18N
+        botaoLimparRecibo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assistenciatecnica/view/img/money-delete.png"))); // NOI18N
         botaoLimparRecibo.setText("Limpar Recibo");
         botaoLimparRecibo.addActionListener(new java.awt.event.ActionListener()
         {
@@ -388,11 +390,11 @@ public class Recibos extends javax.swing.JFrame implements KeyListener, Containe
         // TODO add your handling code here:
     }//GEN-LAST:event_botaoLimparReciboActionPerformed
 
-    private void botaoPesquisarClienteActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_botaoPesquisarClienteActionPerformed
-    {//GEN-HEADEREND:event_botaoPesquisarClienteActionPerformed
-		this.janelaProcuraClientes = new ProcuraClientes(this, true);
-		this.janelaProcuraClientes.setVisible(true);
-    }//GEN-LAST:event_botaoPesquisarClienteActionPerformed
+    private void botaoProcurarClienteActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_botaoProcurarClienteActionPerformed
+    {//GEN-HEADEREND:event_botaoProcurarClienteActionPerformed
+        ProcuraClientes pc = new ProcuraClientes(this, true);
+        pc.setVisible(true);
+    }//GEN-LAST:event_botaoProcurarClienteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -438,7 +440,7 @@ public class Recibos extends javax.swing.JFrame implements KeyListener, Containe
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoGerarRecibo;
     private javax.swing.JButton botaoLimparRecibo;
-    private javax.swing.JButton botaoPesquisarCliente;
+    private javax.swing.JButton botaoProcurarCliente;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel labelComplemento;
     private javax.swing.JLabel labelData;

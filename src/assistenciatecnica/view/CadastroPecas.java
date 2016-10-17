@@ -611,7 +611,7 @@ public class CadastroPecas extends javax.swing.JFrame implements KeyListener, Co
 		textoQuantidade.setText("");
 		textoObs.setText("");
 		
-		new ControladorTabelas().apagaTabela(tabelaFornecedor);
+		ControladorTabelas.apagaTabela(tabelaFornecedor);
 	}
 	
 	/*

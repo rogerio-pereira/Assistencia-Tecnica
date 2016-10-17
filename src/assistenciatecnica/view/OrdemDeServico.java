@@ -22,9 +22,19 @@
 package assistenciatecnica.view;
 
 import assistenciatecnica.control.ControladorAtendimentos;
+import assistenciatecnica.control.ControladorBancodeDados;
 import assistenciatecnica.control.ControladorClientes;
+import assistenciatecnica.control.ControladorPagamentos;
+import assistenciatecnica.control.ControladorPeca;
+import assistenciatecnica.control.ControladorServico;
+import assistenciatecnica.control.ControladorUsuario;
+import assistenciatecnica.control.util.ControladorTabelas;
 import assistenciatecnica.model.Clientes;
 import assistenciatecnica.model.OrdemServico;
+import assistenciatecnica.model.Pecas;
+import assistenciatecnica.model.PecasOs;
+import assistenciatecnica.model.ServicoOs;
+import assistenciatecnica.model.Servicos;
 import assistenciatecnica.model.Usuario;
 import java.awt.Component;
 import java.awt.Container;
@@ -32,7 +42,20 @@ import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -49,12 +72,14 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
         //Adiciona Listeners de Botões
         addKeyAndContainerListenerRecursively(this);
 
-	this.setLocationRelativeTo(null);
-	
-	textoCodigo.setText("** NOVO **");
-	textoStatus.setText("Abertura");
-	
-	this.getAtendimentos();
+        this.setLocationRelativeTo(null);
+
+        textoCodigo.setText("** NOVO **");
+        alteraStatus();
+
+        this.getAtendimentos();
+        this.getPagamentos();
+        //this.pagamentoVisible(false, false);
     }
 
     /** This method is called from within the constructor to
@@ -72,6 +97,15 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
         textoCodigo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         textoStatus = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
+        textoAbertura = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
+        textoFechamento = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        textoEntrega = new javax.swing.JTextField();
+        labelPagamento = new javax.swing.JLabel();
+        comboPagamento = new javax.swing.JComboBox<>();
+        textoParcelas = new javax.swing.JFormattedTextField();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         botaoClienteAdicionar = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -103,27 +137,18 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
         tabelaServicos = new javax.swing.JTable();
         botaoAdicionarServico = new javax.swing.JButton();
         botaoRemoverServico = new javax.swing.JButton();
-        PainelPagamentos = new javax.swing.JPanel();
-        botaoAdicionarPagamento = new javax.swing.JButton();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        tabelaServicos1 = new javax.swing.JTable();
-        botaoRemoverPagamento = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
-        textoParcelas = new javax.swing.JTextField();
         painelObservacoes = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         textoObservacoes = new javax.swing.JTextArea();
         PainelRecebimentos = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        TextoPorcentagemDesconto = new javax.swing.JTextField();
         textoDesconto = new formattedFields.jTextMoeda();
         textoTotal = new formattedFields.jTextMoeda();
-        textoValorPago = new formattedFields.jTextMoeda();
-        textoValorReceber = new formattedFields.jTextMoeda();
+        textoValorFinal = new formattedFields.jTextMoeda();
+        textoPorcentagemDesconto = new javax.swing.JFormattedTextField();
         botaoSalvar = new javax.swing.JButton();
         botaoProcurar = new javax.swing.JButton();
         botaoEditar = new javax.swing.JButton();
@@ -148,6 +173,51 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
         textoStatus.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         textoStatus.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         textoStatus.setFocusable(false);
+        textoStatus.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                textoStatusMouseClicked(evt);
+            }
+        });
+        textoStatus.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                textoStatusActionPerformed(evt);
+            }
+        });
+
+        jLabel16.setText("Abertura");
+
+        textoAbertura.setEditable(false);
+        textoAbertura.setFocusable(false);
+
+        jLabel17.setText("Fechamento");
+
+        textoFechamento.setEditable(false);
+        textoFechamento.setFocusable(false);
+
+        jLabel18.setText("Entrega");
+        jLabel18.setToolTipText("");
+
+        textoEntrega.setEditable(false);
+        textoEntrega.setFocusable(false);
+
+        labelPagamento.setText("Pagamento");
+
+        comboPagamento.setMaximumSize(new java.awt.Dimension(175, 25));
+        comboPagamento.setMinimumSize(new java.awt.Dimension(175, 25));
+        comboPagamento.setPreferredSize(new java.awt.Dimension(175, 25));
+        comboPagamento.addItemListener(new java.awt.event.ItemListener()
+        {
+            public void itemStateChanged(java.awt.event.ItemEvent evt)
+            {
+                comboPagamentoItemStateChanged(evt);
+            }
+        });
+
+        textoParcelas.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
 
         javax.swing.GroupLayout PainelCodigoLayout = new javax.swing.GroupLayout(PainelCodigo);
         PainelCodigo.setLayout(PainelCodigoLayout);
@@ -155,13 +225,32 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
             PainelCodigoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PainelCodigoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(textoCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(textoStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(PainelCodigoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel16)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel18))
+                .addGap(31, 31, 31)
+                .addGroup(PainelCodigoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(textoCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                    .addComponent(textoAbertura)
+                    .addComponent(textoEntrega))
+                .addGroup(PainelCodigoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PainelCodigoLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(PainelCodigoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel17)
+                            .addComponent(jLabel2)))
+                    .addGroup(PainelCodigoLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(labelPagamento)))
+                .addGap(24, 24, 24)
+                .addGroup(PainelCodigoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(textoStatus)
+                    .addComponent(textoFechamento)
+                    .addGroup(PainelCodigoLayout.createSequentialGroup()
+                        .addComponent(comboPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(textoParcelas)))
                 .addContainerGap())
         );
         PainelCodigoLayout.setVerticalGroup(
@@ -173,6 +262,19 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
                     .addComponent(textoCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(textoStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PainelCodigoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(textoAbertura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel17)
+                    .addComponent(textoFechamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PainelCodigoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel18)
+                    .addComponent(textoEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelPagamento)
+                    .addComponent(comboPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(textoParcelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -249,7 +351,7 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
             .addGroup(botaoClienteAdicionarLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(botaoClienteAdicionarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
                     .addGroup(botaoClienteAdicionarLayout.createSequentialGroup()
                         .addGroup(botaoClienteAdicionarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
@@ -280,7 +382,7 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
                             .addComponent(comboAtendimento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(botaoClienteAdicionarLayout.createSequentialGroup()
                         .addComponent(jLabel8)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 569, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         botaoClienteAdicionarLayout.setVerticalGroup(
@@ -327,9 +429,23 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
 
         botaoAdicionarPeca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assistenciatecnica/view/img/input-mouse-2_menor_add.png"))); // NOI18N
         botaoAdicionarPeca.setText("Adicionar Peça");
+        botaoAdicionarPeca.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                botaoAdicionarPecaActionPerformed(evt);
+            }
+        });
 
         botaoRemoverPeca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assistenciatecnica/view/img/input-mouse-2_menor_remove.png"))); // NOI18N
         botaoRemoverPeca.setText("Remover Peça");
+        botaoRemoverPeca.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                botaoRemoverPecaActionPerformed(evt);
+            }
+        });
 
         tabelaPecas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
@@ -361,6 +477,13 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
                 return canEdit [columnIndex];
             }
         });
+        tabelaPecas.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
+                tabelaPecasKeyPressed(evt);
+            }
+        });
         jScrollPane3.setViewportView(tabelaPecas);
 
         javax.swing.GroupLayout painelPeçasLayout = new javax.swing.GroupLayout(painelPeças);
@@ -370,7 +493,7 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
             .addGroup(painelPeçasLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(painelPeçasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
                     .addGroup(painelPeçasLayout.createSequentialGroup()
                         .addComponent(botaoAdicionarPeca)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -412,13 +535,34 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
                 return canEdit [columnIndex];
             }
         });
+        tabelaServicos.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
+                tabelaServicosKeyPressed(evt);
+            }
+        });
         jScrollPane4.setViewportView(tabelaServicos);
 
         botaoAdicionarServico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assistenciatecnica/view/img/chardevice_add.png"))); // NOI18N
         botaoAdicionarServico.setText("Adicionar Serviço");
+        botaoAdicionarServico.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                botaoAdicionarServicoActionPerformed(evt);
+            }
+        });
 
         botaoRemoverServico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assistenciatecnica/view/img/chardevice_delete.png"))); // NOI18N
         botaoRemoverServico.setText("Remover Serviço");
+        botaoRemoverServico.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                botaoRemoverServicoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout painelServicosLayout = new javax.swing.GroupLayout(painelServicos);
         painelServicos.setLayout(painelServicosLayout);
@@ -427,7 +571,7 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
             .addGroup(painelServicosLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(painelServicosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
                     .addGroup(painelServicosLayout.createSequentialGroup()
                         .addComponent(botaoAdicionarServico)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -448,80 +592,6 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
 
         jTabbedPane1.addTab("Serviços", painelServicos);
 
-        botaoAdicionarPagamento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assistenciatecnica/view/img/money-add.png"))); // NOI18N
-        botaoAdicionarPagamento.setText("Adicionar Pagamento");
-
-        tabelaServicos1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][]
-            {
-                {null, null, null, null, null, null, null}
-            },
-            new String []
-            {
-                "Vencimento", "Valor", "Pago", "Data Pagamento", "Valor Pago", "Forma Pagamento", "Observação"
-            }
-        )
-        {
-            Class[] types = new Class []
-            {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean []
-            {
-                false, false, true, true, true, true, true
-            };
-
-            public Class getColumnClass(int columnIndex)
-            {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex)
-            {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane5.setViewportView(tabelaServicos1);
-
-        botaoRemoverPagamento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assistenciatecnica/view/img/money-delete.png"))); // NOI18N
-        botaoRemoverPagamento.setText("Remover Pagamento");
-
-        jLabel9.setText("Parcelas");
-
-        javax.swing.GroupLayout PainelPagamentosLayout = new javax.swing.GroupLayout(PainelPagamentos);
-        PainelPagamentos.setLayout(PainelPagamentosLayout);
-        PainelPagamentosLayout.setHorizontalGroup(
-            PainelPagamentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelPagamentosLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(PainelPagamentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
-                    .addGroup(PainelPagamentosLayout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(textoParcelas, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(botaoAdicionarPagamento)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(botaoRemoverPagamento)))
-                .addContainerGap())
-        );
-        PainelPagamentosLayout.setVerticalGroup(
-            PainelPagamentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelPagamentosLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(PainelPagamentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(botaoAdicionarPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botaoRemoverPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9)
-                    .addComponent(textoParcelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        jTabbedPane1.addTab("Pagamentos", PainelPagamentos);
-
         textoObservacoes.setColumns(20);
         textoObservacoes.setLineWrap(true);
         textoObservacoes.setWrapStyleWord(true);
@@ -533,7 +603,7 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
             painelObservacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelObservacoesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
                 .addContainerGap())
         );
         painelObservacoesLayout.setVerticalGroup(
@@ -550,16 +620,11 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
 
         jLabel10.setText("Valor Total");
 
-        jLabel11.setText("Valor Pago");
-
-        jLabel12.setText("Valor a Receber");
+        jLabel12.setText("Valor Final");
 
         jLabel13.setText("Desconto");
 
         jLabel14.setText("Porcentagem Desconto");
-
-        TextoPorcentagemDesconto.setEditable(false);
-        TextoPorcentagemDesconto.setFocusable(false);
 
         textoDesconto.setEditable(false);
         textoDesconto.setFocusable(false);
@@ -567,11 +632,17 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
         textoTotal.setEditable(false);
         textoTotal.setFocusable(false);
 
-        textoValorPago.setEditable(false);
-        textoValorPago.setFocusable(false);
+        textoValorFinal.setEditable(false);
+        textoValorFinal.setFocusable(false);
 
-        textoValorReceber.setEditable(false);
-        textoValorReceber.setFocusable(false);
+        textoPorcentagemDesconto.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0.00 %"))));
+        textoPorcentagemDesconto.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                textoPorcentagemDescontoFocusLost(evt);
+            }
+        });
 
         javax.swing.GroupLayout PainelRecebimentosLayout = new javax.swing.GroupLayout(PainelRecebimentos);
         PainelRecebimentos.setLayout(PainelRecebimentosLayout);
@@ -580,18 +651,16 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
             .addGroup(PainelRecebimentosLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(PainelRecebimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel14)
                     .addComponent(jLabel10)
                     .addComponent(jLabel13)
-                    .addComponent(jLabel11)
+                    .addComponent(jLabel14)
                     .addComponent(jLabel12))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(PainelRecebimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(TextoPorcentagemDesconto)
-                    .addComponent(textoDesconto, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
-                    .addComponent(textoTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(textoValorPago, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(textoValorReceber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(textoTotal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+                    .addComponent(textoDesconto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(textoValorFinal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(textoPorcentagemDesconto))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         PainelRecebimentosLayout.setVerticalGroup(
@@ -608,62 +677,72 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PainelRecebimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
-                    .addComponent(TextoPorcentagemDesconto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textoPorcentagemDesconto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PainelRecebimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel11)
-                    .addComponent(textoValorPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PainelRecebimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(PainelRecebimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
-                    .addComponent(textoValorReceber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textoValorFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         botaoSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assistenciatecnica/view/img/accept.png"))); // NOI18N
         botaoSalvar.setText("Salvar");
+        botaoSalvar.setMaximumSize(new java.awt.Dimension(150, 32));
+        botaoSalvar.setMinimumSize(new java.awt.Dimension(150, 32));
+        botaoSalvar.setPreferredSize(new java.awt.Dimension(150, 32));
+        botaoSalvar.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                botaoSalvarActionPerformed(evt);
+            }
+        });
 
         botaoProcurar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assistenciatecnica/view/img/magnifier.png"))); // NOI18N
         botaoProcurar.setText("Procurar");
+        botaoProcurar.setMaximumSize(new java.awt.Dimension(150, 32));
+        botaoProcurar.setMinimumSize(new java.awt.Dimension(150, 32));
+        botaoProcurar.setPreferredSize(new java.awt.Dimension(150, 32));
 
         botaoEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assistenciatecnica/view/img/pencil.png"))); // NOI18N
         botaoEditar.setText("Editar");
+        botaoEditar.setMaximumSize(new java.awt.Dimension(150, 32));
+        botaoEditar.setMinimumSize(new java.awt.Dimension(150, 32));
+        botaoEditar.setPreferredSize(new java.awt.Dimension(150, 32));
 
         botaoApagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assistenciatecnica/view/img/edit-delete-2.png"))); // NOI18N
         botaoApagar.setText("Apagar");
+        botaoApagar.setMaximumSize(new java.awt.Dimension(150, 32));
+        botaoApagar.setMinimumSize(new java.awt.Dimension(150, 32));
+        botaoApagar.setPreferredSize(new java.awt.Dimension(150, 32));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(PainelRecebimentos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(PainelCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1)
-                    .addComponent(PainelRecebimentos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(PainelCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(botaoSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(botaoProcurar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(botaoEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(botaoApagar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addComponent(botaoSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(botaoProcurar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(botaoEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(botaoApagar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(PainelCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(PainelRecebimentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botaoSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(botaoProcurar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -695,8 +774,168 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
 
     private void botaoProcurarTecnicoActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_botaoProcurarTecnicoActionPerformed
     {//GEN-HEADEREND:event_botaoProcurarTecnicoActionPerformed
-		
+        ProcurarUsuarios pu = new ProcurarUsuarios(this, true);
+		pu.setVisible(true);
     }//GEN-LAST:event_botaoProcurarTecnicoActionPerformed
+
+    private void botaoSalvarActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_botaoSalvarActionPerformed
+    {//GEN-HEADEREND:event_botaoSalvarActionPerformed
+        somaValores();
+        
+        OrdemServico            os  = new OrdemServico();
+        SimpleDateFormat        sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        Calendar                cal = Calendar.getInstance();
+        ControladorBancodeDados bd  = new ControladorBancodeDados();
+        
+        os.setStatus(textoStatus.getText());
+        
+        os.setCliente(cliente);
+        os.setTecnico(tecnico);
+        os.setEquipamento(textoEquipamento.getText());
+        os.setModelo(textoModelo.getText());
+        os.setNumeroSerie(textoNumeroSerie.getText());
+        os.setDefeito(textoDefeito.getText());
+        os.setObservacao(textoObservacoes.getText());
+        os.setValor(textoTotal.getValue());
+        os.setDesconto(textoDesconto.getValue());
+        os.setPorcentagemDesconto(Double.parseDouble(textoPorcentagemDesconto.getText().replace(" %", "").replace(",", ".")));
+        os.setValorFinal(textoValorFinal.getValue());
+        
+        //Datas
+        try {
+            //Abertura
+            cal.setTime(sdf.parse(textoAbertura.getText()));
+            os.setAbertura(cal);
+            
+            //Fechamento
+            if(!textoFechamento.getText().isEmpty())
+            {
+                cal.setTime(sdf.parse(textoFechamento.getText()));
+                os.setFechamento(cal);
+            }
+            
+            //Entrega
+            if(!textoEntrega.getText().isEmpty())
+            {
+                cal.setTime(sdf.parse(textoEntrega.getText()));
+                os.setFechamento(cal);
+            }
+        }
+        catch (ParseException ex) {
+            
+        }
+        
+        //Atendimento
+        os.setAtendimento(new ControladorAtendimentos().getAtendimentoByNome(comboAtendimento.getSelectedItem().toString()));
+        
+        //Pagamento
+        if(comboPagamento.getSelectedIndex() > 0)
+            os.setPagamento(new ControladorPagamentos().getPagamentoByNome(comboPagamento.getSelectedItem().toString()));
+        if(!textoParcelas.getText().isEmpty())
+            os.setParcelasPagamento(Integer.parseInt(textoParcelas.getText()));
+        
+        //Peças
+        Collection<PecasOs> pecas = new ArrayList<PecasOs>();
+        for(int i=0; i<tabelaPecas.getRowCount(); i++)
+        {
+            PecasOs peca = new PecasOs();
+            peca.setPeca(new ControladorPeca().getPecaByCodigo(Long.parseLong(tabelaPecas.getValueAt(i, 0).toString()), this));
+            peca.setValor(Double.parseDouble(tabelaPecas.getValueAt(i, 2).toString().replace("R$ ", "").replace(".", "").replace(",", ".")));
+            peca.setQuantidade(Integer.parseInt(tabelaPecas.getValueAt(i, 3).toString()));
+            peca.setDesconto(Double.parseDouble(tabelaPecas.getValueAt(i, 4).toString().replace("R$ ", "").replace(".", "").replace(",", ".")));
+            pecas.add(peca);
+        }
+        os.setPecas(pecas);
+        
+        //Serviços
+        Collection<ServicoOs> servicos = new ArrayList<ServicoOs>();
+        for(int i=0; i<tabelaServicos.getRowCount(); i++)
+        {
+            ServicoOs servico = new ServicoOs();
+            servico.setServico(new ControladorServico().getServicoByCodigo(Long.parseLong(tabelaServicos.getValueAt(i, 0).toString()), this));
+            servico.setValor(Double.parseDouble(tabelaServicos.getValueAt(i, 2).toString().replace("R$ ", "").replace(".", "").replace(",", ".")));
+            servico.setDesconto(Double.parseDouble(tabelaServicos.getValueAt(i, 3).toString().replace("R$ ", "").replace(".", "").replace(",", ".")));
+            servicos.add(servico);
+        }
+        os.setServicos(servicos);
+        
+        if(!textoCodigo.getText().equals("** NOVO **"))
+        {
+            os.setCodigo(Long.parseLong(textoCodigo.getText()));
+            bd.atualizar(os, this);
+        }
+        else
+            bd.cadastrar(os, this);
+            
+    }//GEN-LAST:event_botaoSalvarActionPerformed
+
+    private void textoStatusMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_textoStatusMouseClicked
+    {//GEN-HEADEREND:event_textoStatusMouseClicked
+        alteraStatus();
+    }//GEN-LAST:event_textoStatusMouseClicked
+
+    private void textoStatusActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_textoStatusActionPerformed
+    {//GEN-HEADEREND:event_textoStatusActionPerformed
+        alteraStatus();
+    }//GEN-LAST:event_textoStatusActionPerformed
+
+    private void botaoAdicionarPecaActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_botaoAdicionarPecaActionPerformed
+    {//GEN-HEADEREND:event_botaoAdicionarPecaActionPerformed
+        ProcurarPecas j = new ProcurarPecas();
+        j.setJanela(this);
+        j.setVisible(true);
+    }//GEN-LAST:event_botaoAdicionarPecaActionPerformed
+
+    private void botaoRemoverPecaActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_botaoRemoverPecaActionPerformed
+    {//GEN-HEADEREND:event_botaoRemoverPecaActionPerformed
+        ControladorTabelas.removerLinhaTabela(this.tabelaPecas);
+    }//GEN-LAST:event_botaoRemoverPecaActionPerformed
+
+    private void botaoRemoverServicoActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_botaoRemoverServicoActionPerformed
+    {//GEN-HEADEREND:event_botaoRemoverServicoActionPerformed
+        ControladorTabelas.removerLinhaTabela(this.tabelaServicos);
+    }//GEN-LAST:event_botaoRemoverServicoActionPerformed
+
+    private void tabelaPecasKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_tabelaPecasKeyPressed
+    {//GEN-HEADEREND:event_tabelaPecasKeyPressed
+        //TECLA ENTER
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            calculaValoresTabela(tabelaPecas);
+        }
+    }//GEN-LAST:event_tabelaPecasKeyPressed
+
+    private void tabelaServicosKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_tabelaServicosKeyPressed
+    {//GEN-HEADEREND:event_tabelaServicosKeyPressed
+        //TECLA ENTER
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            calculaValoresTabela(tabelaServicos);
+        }
+    }//GEN-LAST:event_tabelaServicosKeyPressed
+
+    private void botaoAdicionarServicoActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_botaoAdicionarServicoActionPerformed
+    {//GEN-HEADEREND:event_botaoAdicionarServicoActionPerformed
+        ProcurarServico j = new ProcurarServico();
+        j.setJanela(this);
+        j.setVisible(true);
+    }//GEN-LAST:event_botaoAdicionarServicoActionPerformed
+
+    private void textoPorcentagemDescontoFocusLost(java.awt.event.FocusEvent evt)//GEN-FIRST:event_textoPorcentagemDescontoFocusLost
+    {//GEN-HEADEREND:event_textoPorcentagemDescontoFocusLost
+        calculaPorcentagemDesconto();
+    }//GEN-LAST:event_textoPorcentagemDescontoFocusLost
+
+    private void comboPagamentoItemStateChanged(java.awt.event.ItemEvent evt)//GEN-FIRST:event_comboPagamentoItemStateChanged
+    {//GEN-HEADEREND:event_comboPagamentoItemStateChanged
+        if(comboPagamento.getSelectedIndex()> -1)
+        {
+            if(comboPagamento.getSelectedItem().toString().contains("CRÉDITO"))
+                this.pagamentoVisible(true, true);
+            else
+                this.pagamentoVisible(true, false);
+        }
+    }//GEN-LAST:event_comboPagamentoItemStateChanged
 
 
     /*
@@ -766,6 +1005,28 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
 		for(String atendimento : atendimentos)
 			this.comboAtendimento.addItem(atendimento.toString());
 	}
+    
+    /*
+	 * Método getPagamentos
+	 * Obtem todos os modos de pagamento cadastrados e insere no combobox
+	 */
+	private void getPagamentos()
+	{
+		List<String> pagamentos = new ControladorPagamentos().getPagamentos();
+		this.comboPagamento.addItem("");
+		for(String pagamento : pagamentos)
+			this.comboPagamento.addItem(pagamento.toString());
+	}
+    
+    private void pagamentoVisible(boolean campo, boolean parcela)
+    {
+        textoParcelas.setText(null);
+        this.labelPagamento.setVisible(campo);
+        this.comboPagamento.setVisible(campo);
+        this.textoParcelas.setVisible(parcela);
+        invalidate();
+        validate();
+    }
 	
 	/*
 	 * Método getClienteByCodigo
@@ -776,6 +1037,209 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
 		this.cliente	= new ControladorClientes().getClientesByCodigo(codigo, this);
 		this.textoCliente.setText(this.cliente.getNome());
 	}
+    
+    /*
+	 * Método getClienteByCodigo
+	 * Obtem o cliente pelo Codigo
+	 */
+	public void getUsuarioByCodigo(Long codigo)
+	{
+		this.tecnico	= new ControladorUsuario().getUsuarioByCod(codigo, this);
+		this.textoTecnico.setText(this.tecnico.getNome());
+	}
+    
+    /**
+     * 
+     * @param campo Campo para ser setado a data Atual (1 = Abertura; 2 = Fechamento; 3 = Finalização)
+     */
+    private void setDataAtual(int campo)
+    {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis()); 
+        String date = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(timestamp.getTime());
+        
+        if(campo ==  1)
+        {
+            textoAbertura.setText(date);
+            textoFechamento.setText("");
+            textoEntrega.setText("");
+        }
+        else if(campo == 2)
+        {
+            textoFechamento.setText(date);
+            textoEntrega.setText("");
+        }
+        else if(campo == 3)
+        {
+            textoEntrega.setText(date);
+        }
+    }
+    
+    private void alteraStatus()
+    {
+        comboPagamento.setSelectedIndex(-1);
+        pagamentoVisible(false, false);
+        if(textoCodigo.getText().equals("** NOVO **"))
+        {
+            setDataAtual(1);
+
+            textoStatus.setText("Em Abertura");
+        }
+        else
+        {
+            if(textoStatus.getText().equals("") || textoStatus.getText().equals("Entregue"))
+            {
+                if(textoCodigo.getText().equals("** NOVO **"))
+                    setDataAtual(1);
+
+                textoStatus.setText("Em Abertura");
+            }
+            else if(textoStatus.getText().equals("Em Abertura"))
+                textoStatus.setText("Em análise");
+            else if(textoStatus.getText().equals("Em análise"))
+            {
+                setDataAtual(2);
+                textoStatus.setText("Fechado");
+            }
+            else if(textoStatus.getText().equals("Fechado"))
+            {
+                setDataAtual(3);
+                textoStatus.setText("Entregue");
+                pagamentoVisible(true, false);
+            }
+        }
+    }
+    
+    public void insertProduto(Long codigo)
+    {
+		ControladorPeca controladorPecas    = new ControladorPeca();
+		Pecas           peca                = controladorPecas.getPecaByCodigo(codigo, this);
+		
+		DecimalFormat fmt = new DecimalFormat("#,##0.00");   //limita o número de casas decimais
+		String valor = "R$ "+fmt.format(peca.getValor());
+        
+        DefaultTableModel modelo = (DefaultTableModel) this.tabelaPecas.getModel();
+        modelo.addRow(new String[]	{
+                                    peca.getCodigo().toString(),
+                                    peca.getPeca(),
+                                    valor,
+                                    "1",
+                                    "R$ 0,00"
+                                });
+		
+		controladorPecas = null;
+        
+        calculaValoresTabela(tabelaPecas);
+    }
+    
+    public void insertServico(Long codigo)
+    {
+        ControladorServico  controladorServico  = new ControladorServico();
+		Servicos            servico             = controladorServico.getServicoByCodigo(codigo, this);
+		
+		DecimalFormat fmt = new DecimalFormat("#,##0.00");   //limita o número de casas decimais
+		String valor = "R$ "+fmt.format(servico.getValor());
+        
+        DefaultTableModel modelo = (DefaultTableModel) this.tabelaServicos.getModel();
+        modelo.addRow(new String[]	{
+                                    servico.getCodigo().toString(),
+                                    servico.getServico(),
+                                    valor,
+                                    "R$ 0,00"
+                                });
+		
+		controladorServico = null;
+        
+        calculaValoresTabela(tabelaServicos);
+    }
+    
+    private void calculaValoresTabela(JTable tabela)
+    {
+        DecimalFormat fmt = new DecimalFormat("#,##0.00");   //limita o número de casas decimais
+        
+        for(int i=0; i<tabela.getRowCount(); i++)
+        {
+            int     quantidade  = 1;
+            double  valor       = Double.parseDouble(tabela.getValueAt(i, 2).toString().replace("R$ ", "").replace(".", "").replace(",", "."));
+            double  desconto = 0.0;
+            double  total;
+            
+            if(tabela == tabelaPecas)
+            {
+                desconto    = Double.parseDouble(tabela.getValueAt(i, 4).toString().replace("R$ ", "").replace(".", "").replace(",", "."));
+                quantidade  = Integer.parseInt(tabela.getValueAt(i, 3).toString());
+            
+                total = (valor * quantidade) - desconto;
+                
+                tabela.setValueAt("R$ "+fmt.format(total), i, 5);
+            }
+            else if(tabela == tabelaServicos)
+            {
+                desconto = Double.parseDouble(tabela.getValueAt(i, 3).toString().replace("R$ ", "").replace(".", "").replace(",", "."));
+            
+                total = (valor * quantidade) - desconto;
+                
+                tabela.setValueAt("R$ "+fmt.format(total), i, 4);
+            }
+        }
+        
+        somaValores();
+    }
+    
+    private void somaValores()
+    {
+        int     quantidade      = 0;
+        double  valorItem       = 0.0;
+        double  valoresTotal    = 0.0;
+        double  descontos       = 0.0;
+        double  valorFinal      = 0.0;
+                    
+        for(int i=0; i<tabelaPecas.getRowCount(); i++)
+        {
+            valorItem       = Double.parseDouble(tabelaPecas.getValueAt(i, 2).toString().replace("R$ ", "").replace(".", "").replace(",", "."));
+            quantidade      = Integer.parseInt(tabelaPecas.getValueAt(i, 3).toString());
+            
+            valoresTotal    = valoresTotal + (valorItem * quantidade);
+            descontos       = descontos + Double.parseDouble(tabelaPecas.getValueAt(i, 4).toString().replace("R$ ", "").replace(".", "").replace(",", "."));
+        }
+        
+        for(int i=0; i<tabelaServicos.getRowCount(); i++)
+        {
+            valoresTotal    = valoresTotal + Double.parseDouble(tabelaServicos.getValueAt(i, 2).toString().replace("R$ ", "").replace(".", "").replace(",", "."));
+            descontos       = descontos + Double.parseDouble(tabelaServicos.getValueAt(i, 3).toString().replace("R$ ", "").replace(".", "").replace(",", "."));
+        }
+        
+        textoTotal.setText(valoresTotal);
+        textoDesconto.setText(descontos);
+        textoValorFinal.setText(valoresTotal - descontos);
+        
+        calculaPorcentagemDesconto();
+    }
+    
+    public void calculaPorcentagemDesconto()
+    {
+        if(!textoPorcentagemDesconto.getText().isEmpty())
+        {
+            double desconto;
+            double total;
+
+            if(!textoPorcentagemDesconto.getText().contains(" %"))
+                textoPorcentagemDesconto.setText(textoPorcentagemDesconto.getText() + " %");
+
+            desconto = Double.parseDouble(textoPorcentagemDesconto.getText().replace(" %", "").replace(",", "."));
+            desconto = desconto/100;
+
+            try {
+                total = textoValorFinal.getValue();
+                total = total - (total * desconto);
+
+                textoValorFinal.setText(total);
+            }
+            catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Não há nenhum valor!", "Erro", JOptionPane.INFORMATION_MESSAGE, new ImageIcon("img/error-circle.png"));
+                textoPorcentagemDesconto.setText(null);
+            }
+        }
+    }
 
 
     /**
@@ -815,11 +1279,8 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PainelCodigo;
-    private javax.swing.JPanel PainelPagamentos;
     private javax.swing.JPanel PainelRecebimentos;
-    private javax.swing.JTextField TextoPorcentagemDesconto;
     private javax.swing.JButton botaoAdicionarCliente;
-    private javax.swing.JButton botaoAdicionarPagamento;
     private javax.swing.JButton botaoAdicionarPeca;
     private javax.swing.JButton botaoAdicionarServico;
     private javax.swing.JButton botaoAdicionarTecnico;
@@ -829,18 +1290,20 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
     private javax.swing.JButton botaoProcurar;
     private javax.swing.JButton botaoProcurarCliente;
     private javax.swing.JButton botaoProcurarTecnico;
-    private javax.swing.JButton botaoRemoverPagamento;
     private javax.swing.JButton botaoRemoverPeca;
     private javax.swing.JButton botaoRemoverServico;
     private javax.swing.JButton botaoSalvar;
     private javax.swing.JComboBox comboAtendimento;
+    private javax.swing.JComboBox<String> comboPagamento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -848,35 +1311,36 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel labelPagamento;
     private javax.swing.JPanel painelObservacoes;
     private javax.swing.JPanel painelPeças;
     private javax.swing.JPanel painelServicos;
     private javax.swing.JTable tabelaPecas;
     private javax.swing.JTable tabelaServicos;
-    private javax.swing.JTable tabelaServicos1;
+    private javax.swing.JTextField textoAbertura;
     private javax.swing.JTextField textoCliente;
     private javax.swing.JTextField textoCodigo;
     private javax.swing.JTextArea textoDefeito;
     private formattedFields.jTextMoeda textoDesconto;
+    private javax.swing.JTextField textoEntrega;
     private javax.swing.JTextField textoEquipamento;
+    private javax.swing.JTextField textoFechamento;
     private javax.swing.JTextField textoModelo;
     private javax.swing.JTextField textoNumeroSerie;
     private javax.swing.JTextArea textoObservacoes;
-    private javax.swing.JTextField textoParcelas;
+    private javax.swing.JFormattedTextField textoParcelas;
+    private javax.swing.JFormattedTextField textoPorcentagemDesconto;
     private javax.swing.JTextField textoStatus;
     private javax.swing.JTextField textoTecnico;
     private formattedFields.jTextMoeda textoTotal;
-    private formattedFields.jTextMoeda textoValorPago;
-    private formattedFields.jTextMoeda textoValorReceber;
+    private formattedFields.jTextMoeda textoValorFinal;
     // End of variables declaration//GEN-END:variables
 	private OrdemServico	os;
 	private Clientes		cliente;
-	private Usuario		tecnico;
+	private Usuario         tecnico;
 }

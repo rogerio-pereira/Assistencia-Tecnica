@@ -237,6 +237,11 @@ public class ProcurarServico extends javax.swing.JFrame implements KeyListener, 
 				janelaCadastroServicos.limpaTela();
 				janelaCadastroServicos.getServicoByCodigo(Long.parseLong(tabelaServicos.getValueAt(tabelaServicos.getSelectedRow(), 0).toString()));
 			}
+            else if(janela.getTitle() == "Ordem de Serviço")
+			{
+				janelaOrdemDeServico = (OrdemDeServico) janela;
+				janelaOrdemDeServico.insertServico(Long.parseLong(tabelaServicos.getValueAt(tabelaServicos.getSelectedRow(), 0).toString()));
+			}
 
 			this.dispose();
 		}
@@ -318,7 +323,7 @@ public class ProcurarServico extends javax.swing.JFrame implements KeyListener, 
 	 */
 	private void apagaTabela()
 	{
-		new ControladorTabelas().apagaTabela(this.tabelaServicos);
+		ControladorTabelas.apagaTabela(this.tabelaServicos);
 	}
 	
 	/*
@@ -397,4 +402,5 @@ public class ProcurarServico extends javax.swing.JFrame implements KeyListener, 
 	private List<Servicos>		servicos;
 	private JFrame				janela;
 	private CadastroServicos	janelaCadastroServicos;
+    private OrdemDeServico		janelaOrdemDeServico;
 }

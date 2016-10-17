@@ -22,6 +22,7 @@
 package assistenciatecnica.control;
 
 
+import assistenciatecnica.model.Clientes;
 import assistenciatecnica.model.Usuario;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -29,6 +30,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -55,6 +59,50 @@ public class ControladorUsuario
 		
 		return usuarios;
 	}
+    
+    /*
+	 * Método getUsuarios
+	 * Obtem os usuarios cadastrados
+	 */
+	public List<Usuario> getUsuarios(String nome)
+	{
+		this.factory	= Persistence.createEntityManagerFactory	(	
+															"assistenciaTecnica", 
+															new ControladorBancodeDados().getConfigBD()
+														);
+		this.manager	= factory.createEntityManager();
+		
+		Query query	= manager.createNamedQuery("Usuario.findName");
+		query.setParameter(0, "%"+nome+"%");
+		this.usuarios	= query.getResultList();
+		
+		return usuarios;
+	}
+    
+    /*
+     * Método getClientesByCodigo
+     * Obtem o usuario atraves do codigo
+     */
+    public Usuario getUsuarioByCod(Long codigo, JFrame janela)
+    {
+        try
+        {
+            this.factory = Persistence.createEntityManagerFactory	(	
+													"assistenciaTecnica", 
+													new ControladorBancodeDados().getConfigBD()
+												);
+            this.manager = this.factory.createEntityManager();
+            
+            this.usuario = manager.find(Usuario.class, codigo);
+            
+            return this.usuario;
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(janela, "Erro ao buscar Usuario", "Erro", JOptionPane.INFORMATION_MESSAGE, new ImageIcon("img/error-circle.png"));
+            return null;
+        }
+    }
 	
 	/*
 	 * Método getCodigoByUser
@@ -77,9 +125,10 @@ public class ControladorUsuario
 		return this.codigoUsuario;
 	}
 	
-	private EntityManagerFactory		factory;
+	private EntityManagerFactory	factory;
 	private EntityManager			manager;
 	
 	private List<Usuario>			usuarios;
+    private Usuario                 usuario;
 	private Long					codigoUsuario;
 }

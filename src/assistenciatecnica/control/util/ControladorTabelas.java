@@ -31,12 +31,18 @@ import javax.swing.table.DefaultTableModel;
  * @author Rogério Eduardo Pereira
  * Data Criação: Jun 18, 2014
  */
-public class ControladorTabelas 
+public abstract class ControladorTabelas 
 {
-	public void apagaTabela(JTable tabela)
+	public static void apagaTabela(JTable tabela)
 	{
 		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 		while(tabela.getRowCount() > 0)
 			modelo.removeRow(0);
 	}
+    
+    public static void removerLinhaTabela(JTable tabela)
+    {
+        DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
+        modelo.removeRow(tabela.getSelectedRow());
+    }
 }

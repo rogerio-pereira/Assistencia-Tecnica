@@ -86,7 +86,7 @@ public class ControladorBancodeDados
 		}
 		catch (Exception e)
 		{
-			JOptionPane.showMessageDialog(janela, "Erro ao cadastrar", "Erro", JOptionPane.INFORMATION_MESSAGE, new ImageIcon("img/error-circle.png"));
+			JOptionPane.showMessageDialog(janela, "Erro ao cadastrar\nErro: "+e.getMessage()+"\nCausa: "+e.getCause(), "Erro", JOptionPane.INFORMATION_MESSAGE, new ImageIcon("img/error-circle.png"));
 			return false;
 		}
 	}
@@ -117,7 +117,7 @@ public class ControladorBancodeDados
 		}
 		catch (Exception e)
 		{
-			JOptionPane.showMessageDialog(janela, "Erro ao Alterar", "Erro", JOptionPane.INFORMATION_MESSAGE, new ImageIcon("img/error-circle.png"));
+			JOptionPane.showMessageDialog(janela, "Erro ao Alterar\nErro: "+e.getMessage()+"\nCausa: "+e.getCause(), "Erro", JOptionPane.INFORMATION_MESSAGE, new ImageIcon("img/error-circle.png"));
 			return false;
 		}
 	}
@@ -155,7 +155,7 @@ public class ControladorBancodeDados
 		}
 		catch (Exception e)
 		{
-			JOptionPane.showMessageDialog(janela, "Erro ao Apagar", "Erro", JOptionPane.INFORMATION_MESSAGE, new ImageIcon("img/error-circle.png"));
+			JOptionPane.showMessageDialog(janela, "Erro ao Apagar\nErro: "+e.getMessage()+"\nCausa: "+e.getCause(), "Erro", JOptionPane.INFORMATION_MESSAGE, new ImageIcon("img/error-circle.png"));
 			return false;
 		}
 	}
