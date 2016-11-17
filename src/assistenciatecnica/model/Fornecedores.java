@@ -26,6 +26,7 @@ import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -104,10 +105,10 @@ public class Fornecedores
     @Column(nullable=false, length=9)
     private String cep;
     
-    @OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
+    @OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true, fetch = FetchType.LAZY)
     private Collection<TelefonesFornecedores> telefones;
     
-    @OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
+    @OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true, fetch = FetchType.LAZY)
     private Collection<EmailsFornecedores> emails;
 
     @Column(length=999999999)

@@ -32,9 +32,9 @@ where OrdemServico.codigo = $P{Cod}]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="20">
+		<band height="26">
 			<staticText>
-				<reportElement x="0" y="0" width="556" height="20" uuid="e4a6ff21-a5f0-4174-a5ee-49a99489abdf"/>
+				<reportElement x="0" y="0" width="556" height="25" uuid="e4a6ff21-a5f0-4174-a5ee-49a99489abdf"/>
 				<textElement textAlignment="Center">
 					<font size="16" isBold="true"/>
 				</textElement>

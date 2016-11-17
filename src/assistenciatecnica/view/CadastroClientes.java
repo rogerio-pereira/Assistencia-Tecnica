@@ -221,7 +221,7 @@ public class CadastroClientes extends javax.swing.JFrame implements KeyListener,
 		if(this.textoNome.getText().isEmpty())
 			valida = false;
 		//Tipo Pessoa Selecionado
-		if((this.radioPessoaFisica.isSelected()) || (this.radioPessoaJuridica.isSelected()))
+		/*if((this.radioPessoaFisica.isSelected()) || (this.radioPessoaJuridica.isSelected()))
 		{
 			//Pessoa Fisica
 			if(this.radioPessoaFisica.isSelected())
@@ -254,7 +254,7 @@ public class CadastroClientes extends javax.swing.JFrame implements KeyListener,
 		if(this.comboEstado.getSelectedIndex() == -1)
 			valida = false;
 		if(this.textoCEP.getText().isEmpty())
-			valida = false;
+			valida = false;*/
 		
 		if(valida == false)
 			JOptionPane.showMessageDialog(this, "Campo em branco", "Erro", JOptionPane.INFORMATION_MESSAGE, new ImageIcon("img/error-circle.png"));
@@ -1350,7 +1350,7 @@ private void textoObsKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_te
 			else if(this.radioPessoaJuridica.isSelected())
 				this.cliente.setPessoa(false);
 			this.cliente.setRg(this.textoRG.getText());
-			if(!this.textoCPF.getText().equals("   .   .   -  "))
+			if(!this.textoCPF.getText().equals("   .   .   -  "))
 				this.cliente.setCpf(this.textoCPF.getText());
 			else
 				this.cliente.setCpf(null);
@@ -1367,7 +1367,8 @@ private void textoObsKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_te
 			this.cliente.setRgResponsavel(this.textoRGResponsavel.getText());
 			this.cliente.setResponsavel(this.textoResponsavel.getText());
 			this.cliente.setEndereco(this.textoEndereco.getText());
-			this.cliente.setNumero(Integer.parseInt(this.textoNumero.getText()));
+            if(!textoNumero.getText().isEmpty())
+                this.cliente.setNumero(Integer.parseInt(this.textoNumero.getText()));
 			this.cliente.setBairro(this.textoBairro.getText());
 			this.cliente.setComplemento(this.textoComplemento.getText());
 			this.cliente.setCidade(this.textoCidade.getText());

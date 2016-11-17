@@ -26,6 +26,7 @@ import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -53,7 +54,7 @@ public class Clientes
      *  1 - Pessoa Fisica
      *  0 - Pessoa Juridica
      */
-    @Column(nullable=false)
+    @Column
     private Boolean pessoa;
     
     @Column (length=13)
@@ -83,31 +84,30 @@ public class Clientes
     @Column (length=14)
     private String cpfResponsavel;
     
-    @Column(nullable=false, length=100)
+    @Column(length=100)
     private String Endereco;
     
-    @Column(nullable=false)
+    @Column()
     private int numero;
     
-    @Column(nullable=false, length=40)
+    @Column(length=40)
     private String bairro;
     
     @Column(length=15)
     private String complemento;
     
-    @Column(nullable=false, length=50)
+    @Column(length=50)
     private String cidade;
     
-    @Column(nullable=false)
     private int estado;
     
-    @Column(nullable=false, length=9)
+    @Column(length=9)
     private String cep;
     
-    @OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
+    @OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true, fetch = FetchType.LAZY)
     private Collection<TelefonesClientes> telefones;
     
-    @OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
+    @OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true, fetch = FetchType.LAZY)
     private Collection<EmailsClientes> emails;
     
     @Column(length=999999999)

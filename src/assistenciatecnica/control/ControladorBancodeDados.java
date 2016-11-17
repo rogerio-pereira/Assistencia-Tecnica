@@ -53,7 +53,8 @@ public class ControladorBancodeDados
 		try
 		{
 			this.factory    = Persistence.createEntityManagerFactory("assistenciaTecnica", this.getConfigBD()); 
-			factory.close();
+            this.manager    = factory.createEntityManager();
+			//factory.close();
 			return true;
 		}
 		catch(Exception e)
@@ -70,8 +71,8 @@ public class ControladorBancodeDados
 	{
 		try
 		{
-			this.factory    = Persistence.createEntityManagerFactory("assistenciaTecnica", this.getConfigBD());
-			this.manager    = factory.createEntityManager();
+			//this.factory    = Persistence.createEntityManagerFactory("assistenciaTecnica", this.getConfigBD());
+			//this.manager    = factory.createEntityManager();
 
 			this.manager.getTransaction().begin();
 
@@ -79,8 +80,8 @@ public class ControladorBancodeDados
 
 			this.manager.getTransaction().commit();
 
-			this.manager.close();
-			this.factory.close();
+			//this.manager.close();
+			//this.factory.close();
 
 			JOptionPane.showMessageDialog(janela, "Sucesso ao Cadastrar", "Sucesso", JOptionPane.INFORMATION_MESSAGE, new ImageIcon("img/accept-grande.png"));
 
@@ -101,8 +102,8 @@ public class ControladorBancodeDados
 	{
 		try
 		{
-			this.factory    = Persistence.createEntityManagerFactory("assistenciaTecnica", this.getConfigBD());
-			this.manager     = factory.createEntityManager();
+			//this.factory    = Persistence.createEntityManagerFactory("assistenciaTecnica", this.getConfigBD());
+			//this.manager     = factory.createEntityManager();
 
 			this.manager.getTransaction().begin();
 
@@ -110,8 +111,8 @@ public class ControladorBancodeDados
 
 			this.manager.getTransaction().commit();
 
-			this.manager.close();
-			this.factory.close();
+			//this.manager.close();
+			//this.factory.close();
 
 			JOptionPane.showMessageDialog(janela, "Sucesso ao Alterar", "Sucesso", JOptionPane.INFORMATION_MESSAGE, new ImageIcon("img/accept-grande.png"));
 
@@ -137,8 +138,8 @@ public class ControladorBancodeDados
 	{
 		try
 		{
-			this.factory    = Persistence.createEntityManagerFactory("assistenciaTecnica", this.getConfigBD());
-			this.manager = this.factory.createEntityManager();
+			//this.factory    = Persistence.createEntityManagerFactory("assistenciaTecnica", this.getConfigBD());
+			//this.manager = this.factory.createEntityManager();
 
 			this.manager.getTransaction().begin();
 
@@ -148,8 +149,8 @@ public class ControladorBancodeDados
 
 			this.manager.getTransaction().commit();
 
-			this.manager.close();
-			this.factory.close();
+			//this.manager.close();
+			//this.factory.close();
 
 			JOptionPane.showMessageDialog(janela, "Sucesso ao Apagar", "Sucesso", JOptionPane.INFORMATION_MESSAGE, new ImageIcon("img/accept-grande.png"));
 
@@ -190,7 +191,7 @@ public class ControladorBancodeDados
 			show_sql	= prop.getProperty("show_sql");
 			user		= prop.getProperty("user");
 			password	= prop.getProperty("password");
-			server	= prop.getProperty("server");
+			server      = prop.getProperty("server");
 			port		= prop.getProperty("port");
 			database	= prop.getProperty("database");
 			
@@ -258,7 +259,7 @@ public class ControladorBancodeDados
 		}
 	}
 	
-	private Map                     config;
-	private EntityManagerFactory	factory;
-	private EntityManager			manager;
+	private Map                         config;
+	private static EntityManagerFactory	factory;
+	private static EntityManager		manager;
 }

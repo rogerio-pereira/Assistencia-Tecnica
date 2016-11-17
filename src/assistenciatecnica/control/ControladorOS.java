@@ -70,21 +70,33 @@ public class ControladorOS {
 	 * Método getClientes
 	 * Obtem o cliente
 	 */
-	public List<OrdemServico> getOrdensServico(Long codigo, String nome, String cpf, String cnpj)
+	public List<OrdemServico> getOrdensServico(Long codigo, String nome, String cpf, String cnpj, boolean finalizada)
 	{
 		String filtro = new String();
 		try
 		{
 			if(codigo != null)
 				filtro += " AND codigo = "+codigo;
-			
+            
+            if(nome != null)
+				filtro += " AND o.cliente.nome = "+nome;
+            
+            if(cpf != null)
+				filtro += " AND o.cliente.cpf = "+cpf;
+            
+            if(cnpj != null)
+				filtro += " AND o.cliente.cnpj = "+cnpj;
+            
+            if(finalizada != true)
+                filtro += " AND o.status <> 'Entregue'";
+            
 			this.factory = Persistence.createEntityManagerFactory	(	
 															"assistenciaTecnica", 
 															new ControladorBancodeDados().getConfigBD()
 														);
 			this.manager = this.factory.createEntityManager();
 			
-			String qr = "Select o FROM OrdemServico o WHERE 1=1 " + filtro + " ORDER BY o.codigo";
+			String qr = "Select o FROM OrdemServico o WHERE 1=1 " + filtro + " ORDER BY o.codigo DESC";
 
 			//Obtendo o Codigo do item
 			Query query = this.manager.createQuery(qr);

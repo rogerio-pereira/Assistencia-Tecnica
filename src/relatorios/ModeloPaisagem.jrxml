@@ -47,21 +47,21 @@ FROM
 	<title>
 		<band height="94" splitType="Stretch">
 			<textField>
-				<reportElement x="546" y="60" width="255" height="15" uuid="8c0e3d8d-176d-4c7c-9927-9b37b64fc9e8"/>
+				<reportElement x="546" y="50" width="255" height="20" uuid="8c0e3d8d-176d-4c7c-9927-9b37b64fc9e8"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Empresa_telefone}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="546" y="75" width="256" height="15" uuid="e94c3d10-1e97-4593-934b-cc004915da02"/>
+				<reportElement x="546" y="70" width="256" height="20" uuid="e94c3d10-1e97-4593-934b-cc004915da02"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Empresa_site}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="279" y="60" width="228" height="15" uuid="b4eeb1cb-7de7-4893-8852-b38de02676f1"/>
+				<reportElement x="279" y="50" width="228" height="20" uuid="b4eeb1cb-7de7-4893-8852-b38de02676f1"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -72,14 +72,14 @@ FROM
 				<imageExpression><![CDATA["../img/logotipoMenor.jpg"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="507" y="60" width="39" height="15" uuid="ef1eccd2-b1f7-4a44-a950-7d654395fcab"/>
+				<reportElement x="507" y="50" width="39" height="20" uuid="ef1eccd2-b1f7-4a44-a950-7d654395fcab"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Tel:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="212" y="75" width="67" height="15" uuid="6e4c2cd0-18d6-4498-83c2-3da2a4b96592"/>
+				<reportElement x="212" y="70" width="67" height="20" uuid="6e4c2cd0-18d6-4498-83c2-3da2a4b96592"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -93,35 +93,35 @@ FROM
 				<textFieldExpression><![CDATA[$F{Empresa_nome}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="279" y="30" width="523" height="30" uuid="0eb980e6-60ce-4de2-a078-da654c73a7ca"/>
+				<reportElement x="279" y="30" width="523" height="20" uuid="0eb980e6-60ce-4de2-a078-da654c73a7ca"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Empresa_Endereco}+" - "+$F{Empresa_numero}+" "+$F{Empresa_complemento}+". "+$F{Empresa_bairro}+". "+$F{Empresa_cidade}+" - "+($F{Empresa_estado}.equals( 0 )  ? "AC" : $F{Empresa_estado}.equals( 1 ) ? "AL" : $F{Empresa_estado}.equals( 2 ) ? "AP" : $F{Empresa_estado}.equals( 3 ) ? "AM" : $F{Empresa_estado}.equals( 4 ) ? "BA" : $F{Empresa_estado}.equals( 5 ) ? "CE" : $F{Empresa_estado}.equals( 6 ) ? "DF" : $F{Empresa_estado}.equals( 7 ) ? "ES" : $F{Empresa_estado}.equals( 8 ) ? "GO" : $F{Empresa_estado}.equals( 9 ) ? "MA" : $F{Empresa_estado}.equals( 10 ) ? "MT" : $F{Empresa_estado}.equals( 11 ) ? "MS" : $F{Empresa_estado}.equals( 12 ) ? "MG" : $F{Empresa_estado}.equals( 13 ) ? "PR" : $F{Empresa_estado}.equals( 14 ) ? "PB" : $F{Empresa_estado}.equals( 15 ) ? "PA" : $F{Empresa_estado}.equals( 16 ) ? "PE" : $F{Empresa_estado}.equals( 17 ) ? "PI" : $F{Empresa_estado}.equals( 18 ) ? "RJ" : $F{Empresa_estado}.equals( 19 ) ? "RN" : $F{Empresa_estado}.equals( 20 ) ? "RS" : $F{Empresa_estado}.equals( 21 ) ? "RO" : $F{Empresa_estado}.equals( 22 ) ? "RR" : $F{Empresa_estado}.equals( 23 ) ? "SC" : $F{Empresa_estado}.equals( 24 ) ? "SE" : $F{Empresa_estado}.equals( 25 ) ? "SP" : $F{Empresa_estado}.equals( 26 ) ? "TO" : "")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Empresa_Endereco}+" - "+$F{Empresa_numero}+", "+$F{Empresa_complemento}+". "+$F{Empresa_bairro}+". "+$F{Empresa_cidade}+" - "+$F{Empresa_estado}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="212" y="60" width="67" height="15" uuid="508e7508-7de4-47c7-b713-2553d6546524"/>
+				<reportElement x="212" y="50" width="67" height="20" uuid="508e7508-7de4-47c7-b713-2553d6546524"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[CNPJ: ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="279" y="75" width="228" height="15" uuid="b5bd0678-b086-494b-addc-a2a77e86ce4b"/>
+				<reportElement x="279" y="70" width="228" height="20" uuid="b5bd0678-b086-494b-addc-a2a77e86ce4b"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Empresa_email}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="212" y="30" width="67" height="15" uuid="9bd90cb3-debe-40a3-8071-13f4b6dff478"/>
+				<reportElement x="212" y="30" width="67" height="20" uuid="9bd90cb3-debe-40a3-8071-13f4b6dff478"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Endereço: ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="507" y="75" width="39" height="15" uuid="3c235479-026f-4245-a6e2-abb6d005e7d8"/>
+				<reportElement x="507" y="70" width="39" height="20" uuid="3c235479-026f-4245-a6e2-abb6d005e7d8"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -133,12 +133,12 @@ FROM
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="20" splitType="Stretch">
+		<band height="26" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="0" width="802" height="20" forecolor="#CCCCFF" backcolor="#CCCCFF" uuid="fcbb4470-dc08-4847-9e62-0caf06d4ab97"/>
+				<reportElement x="0" y="0" width="802" height="25" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="fcbb4470-dc08-4847-9e62-0caf06d4ab97"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="0" y="0" width="802" height="20" uuid="3df618da-d96a-4ced-a50d-400d8fc7067b"/>
+				<reportElement x="0" y="0" width="802" height="25" uuid="3df618da-d96a-4ced-a50d-400d8fc7067b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
@@ -149,7 +149,7 @@ FROM
 	<detail>
 		<band height="20" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="0" width="802" height="20" forecolor="#CCCCFF" backcolor="#CCCCFF" uuid="8795a18e-bee6-4b97-b592-93888fe75589">
+				<reportElement x="0" y="0" width="802" height="20" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="8795a18e-bee6-4b97-b592-93888fe75589">
 					<printWhenExpression><![CDATA[new Boolean(($V{COLUMN_COUNT}.intValue() % 2) == 0)]]></printWhenExpression>
 				</reportElement>
 			</rectangle>

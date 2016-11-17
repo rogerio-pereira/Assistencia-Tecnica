@@ -26,6 +26,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -88,12 +89,10 @@ public class OrdemServico
 	@Column(nullable = false, length=999999999)
 	private String defeito;
 	
-	@OneToMany
-    @Cascade(CascadeType.ALL)
+	@OneToMany(cascade={javax.persistence.CascadeType.ALL}, orphanRemoval=true, fetch = FetchType.LAZY)
 	private Collection<PecasOs> pecas;
 	
-	@OneToMany
-    @Cascade(CascadeType.ALL)
+	@OneToMany(cascade={javax.persistence.CascadeType.ALL}, orphanRemoval=true, fetch = FetchType.LAZY)
 	private Collection<ServicoOs> servicos;
 	
 	@Column(length=999999999)

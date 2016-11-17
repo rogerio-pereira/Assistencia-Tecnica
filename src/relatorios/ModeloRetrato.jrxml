@@ -45,83 +45,83 @@ FROM
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="140" splitType="Stretch">
+		<band height="152" splitType="Stretch">
 			<textField>
-				<reportElement x="279" y="85" width="276" height="15" uuid="8c0e3d8d-176d-4c7c-9927-9b37b64fc9e8"/>
+				<reportElement x="276" y="87" width="276" height="20" uuid="8c0b99b7-3689-417a-bdf5-05bf1cb3a774"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Empresa_telefone}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="279" y="115" width="276" height="15" uuid="e94c3d10-1e97-4593-934b-cc004915da02"/>
+				<reportElement x="278" y="127" width="276" height="20" uuid="719ac337-3800-4a38-8b9d-ae0b1d497d8f"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Empresa_site}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="279" y="70" width="276" height="15" uuid="b4eeb1cb-7de7-4893-8852-b38de02676f1"/>
+				<reportElement x="278" y="67" width="276" height="20" uuid="4c4590ab-fff8-431b-bb01-6e2c85f6de5f"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Empresa_cnpj}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="0" y="45" width="204" height="64" uuid="12795352-b338-4eb3-808a-bc33ecf44f3a"/>
+				<reportElement x="-1" y="42" width="204" height="64" uuid="147fa647-cf95-4e72-8315-3bfaab1ba9a0"/>
 				<imageExpression><![CDATA["../img/logotipoMenor.jpg"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="212" y="85" width="67" height="15" uuid="ef1eccd2-b1f7-4a44-a950-7d654395fcab"/>
+				<reportElement x="211" y="87" width="67" height="20" uuid="a1b24ff9-7921-4591-ab99-753726a8f9b9"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Tel:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="212" y="100" width="67" height="15" uuid="6e4c2cd0-18d6-4498-83c2-3da2a4b96592"/>
+				<reportElement x="211" y="107" width="67" height="20" uuid="3ebe7d0b-19c1-444c-a2de-cbe3ff8e6556"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[E-Mail: ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="212" y="3" width="343" height="27" uuid="5813207e-7e3f-40e4-a9f7-b56c1d64a042"/>
+				<reportElement x="211" y="0" width="343" height="27" uuid="95c0a975-3f65-4ea1-a016-1d7d643c76a5"/>
 				<textElement textAlignment="Center">
 					<font size="18"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Empresa_nome}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="279" y="30" width="276" height="40" uuid="0eb980e6-60ce-4de2-a078-da654c73a7ca"/>
+				<reportElement x="278" y="27" width="276" height="40" uuid="9c46c736-8a64-4c8e-8d66-b1c569300a2d"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Empresa_Endereco}+" - "+$F{Empresa_numero}+" "+$F{Empresa_complemento}+". "+$F{Empresa_bairro}+". "+$F{Empresa_cidade}+" - "+($F{Empresa_estado}.equals( 0 )  ? "AC" : $F{Empresa_estado}.equals( 1 ) ? "AL" : $F{Empresa_estado}.equals( 2 ) ? "AP" : $F{Empresa_estado}.equals( 3 ) ? "AM" : $F{Empresa_estado}.equals( 4 ) ? "BA" : $F{Empresa_estado}.equals( 5 ) ? "CE" : $F{Empresa_estado}.equals( 6 ) ? "DF" : $F{Empresa_estado}.equals( 7 ) ? "ES" : $F{Empresa_estado}.equals( 8 ) ? "GO" : $F{Empresa_estado}.equals( 9 ) ? "MA" : $F{Empresa_estado}.equals( 10 ) ? "MT" : $F{Empresa_estado}.equals( 11 ) ? "MS" : $F{Empresa_estado}.equals( 12 ) ? "MG" : $F{Empresa_estado}.equals( 13 ) ? "PR" : $F{Empresa_estado}.equals( 14 ) ? "PB" : $F{Empresa_estado}.equals( 15 ) ? "PA" : $F{Empresa_estado}.equals( 16 ) ? "PE" : $F{Empresa_estado}.equals( 17 ) ? "PI" : $F{Empresa_estado}.equals( 18 ) ? "RJ" : $F{Empresa_estado}.equals( 19 ) ? "RN" : $F{Empresa_estado}.equals( 20 ) ? "RS" : $F{Empresa_estado}.equals( 21 ) ? "RO" : $F{Empresa_estado}.equals( 22 ) ? "RR" : $F{Empresa_estado}.equals( 23 ) ? "SC" : $F{Empresa_estado}.equals( 24 ) ? "SE" : $F{Empresa_estado}.equals( 25 ) ? "SP" : $F{Empresa_estado}.equals( 26 ) ? "TO" : "")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Empresa_Endereco}+" - "+$F{Empresa_numero}+", "+$F{Empresa_complemento}+". "+$F{Empresa_bairro}+".\n"+$F{Empresa_cidade}+" - "+$F{Empresa_estado}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="212" y="70" width="67" height="15" uuid="508e7508-7de4-47c7-b713-2553d6546524"/>
+				<reportElement x="211" y="67" width="67" height="20" uuid="e16bf27f-e97a-4b8d-9065-19b6892f6bc2"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[CNPJ: ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="279" y="100" width="276" height="15" uuid="b5bd0678-b086-494b-addc-a2a77e86ce4b"/>
+				<reportElement x="278" y="107" width="276" height="20" uuid="c97cebaf-901f-4f6a-9adb-3bd94bf57e55"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Empresa_email}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="212" y="30" width="67" height="15" uuid="9bd90cb3-debe-40a3-8071-13f4b6dff478"/>
+				<reportElement x="211" y="27" width="67" height="20" uuid="8329945f-1815-44b9-b495-f00eeb820cd1"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Endereço: ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="212" y="115" width="67" height="15" uuid="3c235479-026f-4245-a6e2-abb6d005e7d8"/>
+				<reportElement x="209" y="127" width="67" height="20" uuid="6daa9560-b143-42f2-847d-41c0426ea9eb"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -133,12 +133,12 @@ FROM
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="20" splitType="Stretch">
+		<band height="25" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="0" width="555" height="20" forecolor="#CCCCCC" backcolor="#CCCCFF" uuid="fcbb4470-dc08-4847-9e62-0caf06d4ab97"/>
+				<reportElement x="0" y="0" width="555" height="25" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="fcbb4470-dc08-4847-9e62-0caf06d4ab97"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="0" y="0" width="555" height="20" uuid="3df618da-d96a-4ced-a50d-400d8fc7067b"/>
+				<reportElement x="0" y="0" width="555" height="25" uuid="3df618da-d96a-4ced-a50d-400d8fc7067b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
@@ -149,8 +149,8 @@ FROM
 	<detail>
 		<band height="20" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="0" width="555" height="20" forecolor="#CCCCCC" backcolor="#CCCCFF" uuid="8795a18e-bee6-4b97-b592-93888fe75589">
-					<printWhenExpression><![CDATA[new Boolean(($V{COLUMN_COUNT}.intValue() % 2) == 0)]]></printWhenExpression>
+				<reportElement x="0" y="0" width="556" height="20" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="314bdace-330d-40ce-a23c-e6d65ae5bae4">
+					<printWhenExpression><![CDATA[$V{REPORT_COUNT}%2 == 1]]></printWhenExpression>
 				</reportElement>
 			</rectangle>
 		</band>

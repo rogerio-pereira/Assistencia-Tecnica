@@ -78,6 +78,7 @@ public class ProcuraOS extends javax.swing.JDialog implements KeyListener, Conta
         textoNome = new javax.swing.JTextField();
         textoCPF = new formattedFields.JTextCPF();
         textoCNPJ = new formattedFields.JTextCNPJ();
+        checkFinalizada = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         botaoPesquisar = new javax.swing.JButton();
         botaoSelecionar = new javax.swing.JButton();
@@ -100,6 +101,8 @@ public class ProcuraOS extends javax.swing.JDialog implements KeyListener, Conta
 
         jLabel4.setText("CNPJ");
 
+        checkFinalizada.setText("Finalizada");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -107,16 +110,19 @@ public class ProcuraOS extends javax.swing.JDialog implements KeyListener, Conta
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(textoNome, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
-                    .addComponent(textoCodigo)
-                    .addComponent(textoCPF, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(textoCNPJ, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(textoNome, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
+                            .addComponent(textoCodigo)
+                            .addComponent(textoCPF, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(textoCNPJ, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(checkFinalizada))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -137,6 +143,8 @@ public class ProcuraOS extends javax.swing.JDialog implements KeyListener, Conta
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel4)
                     .addComponent(textoCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(checkFinalizada)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -267,8 +275,6 @@ public class ProcuraOS extends javax.swing.JDialog implements KeyListener, Conta
 
     private void botaoPesquisarActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_botaoPesquisarActionPerformed
     {//GEN-HEADEREND:event_botaoPesquisarActionPerformed
-		String cod, nome, marca, tipo;
-
 		this.apagaTabela();
 
 		control = new ControladorOS();
@@ -276,7 +282,8 @@ public class ProcuraOS extends javax.swing.JDialog implements KeyListener, Conta
                                                                 this.getCodigo(),
                                                                 this.getNome(),
                                                                 this.getCpf(),
-                                                                this.getCnpj()
+                                                                this.getCnpj(),
+                                                                this.checkFinalizada.isSelected()
                                                             );
 		this.insereDados(lista);
     }//GEN-LAST:event_botaoPesquisarActionPerformed
@@ -508,6 +515,7 @@ public class ProcuraOS extends javax.swing.JDialog implements KeyListener, Conta
     private javax.swing.JButton botaoLimpar;
     private javax.swing.JButton botaoPesquisar;
     private javax.swing.JButton botaoSelecionar;
+    private javax.swing.JCheckBox checkFinalizada;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

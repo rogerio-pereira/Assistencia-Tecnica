@@ -26,6 +26,7 @@ import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
@@ -62,7 +63,7 @@ public class Pecas
 	@Column(length=999999999)
 	private String observacao;
 	
-	@OneToMany(cascade={CascadeType.REMOVE}, orphanRemoval=true)
+	@OneToMany(cascade={CascadeType.REMOVE}, orphanRemoval=true, fetch = FetchType.LAZY)
 	private Collection<Fornecedores> fornecedores;
 
 

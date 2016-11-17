@@ -31,10 +31,10 @@ where OrdemServico.codigo = $P{Cod}]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="20">
+		<band height="26">
 			<staticText>
-				<reportElement x="0" y="0" width="556" height="20" uuid="c1155d05-a210-4ee2-968f-bddfbe494978"/>
-				<textElement textAlignment="Center">
+				<reportElement x="0" y="0" width="556" height="25" uuid="c1155d05-a210-4ee2-968f-bddfbe494978"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Serviços]]></text>

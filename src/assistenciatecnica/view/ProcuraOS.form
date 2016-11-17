@@ -76,17 +76,22 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="textoNome" alignment="0" pref="233" max="32767" attributes="0"/>
-                      <Component id="textoCodigo" alignment="1" max="32767" attributes="0"/>
-                      <Component id="textoCPF" alignment="0" max="32767" attributes="0"/>
-                      <Component id="textoCNPJ" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="textoNome" alignment="0" pref="233" max="32767" attributes="0"/>
+                              <Component id="textoCodigo" alignment="1" max="32767" attributes="0"/>
+                              <Component id="textoCPF" alignment="0" max="32767" attributes="0"/>
+                              <Component id="textoCNPJ" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Component id="checkFinalizada" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -114,6 +119,8 @@
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                       <Component id="textoCNPJ" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="checkFinalizada" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -147,6 +154,11 @@
         <Component class="formattedFields.JTextCPF" name="textoCPF">
         </Component>
         <Component class="formattedFields.JTextCNPJ" name="textoCNPJ">
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="checkFinalizada">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Finalizada"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

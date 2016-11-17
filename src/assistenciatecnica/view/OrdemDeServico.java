@@ -867,17 +867,18 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
             {
                 cal.setTime(sdf.parse(textoEntrega.getText()));
                 os.setEntrega(cal);
+        
+                //Pagamento
+                if(comboPagamento.getSelectedIndex() != -1)
+                {
+                    os.setPagamento(new ControladorPagamentos().getPagamentoByNome(comboPagamento.getSelectedItem().toString()));
+                    if(!textoParcelas.getText().isEmpty())
+                        os.setParcelasPagamento(Integer.parseInt(textoParcelas.getText()));
+                }
             }
         }
         catch (ParseException ex) {
             
-        }
-        
-        //Pagamento
-        if(comboPagamento.getSelectedIndex() != -1)
-        {
-            os.setPagamento(new ControladorPagamentos().getPagamentoByNome(comboPagamento.getSelectedItem().toString()));
-            os.setParcelasPagamento(Integer.parseInt(textoParcelas.getText()));
         }
         
         //Atendimento
@@ -923,13 +924,12 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
         {
             bd.cadastrar(os, this);
         }
-        
         //Abertura
         if(textoStatus.getText().equals("Em Abertura") || textoStatus.getText().equals("Em análise"))
-            imprimir("relatorios/OS_Abertura.jasper");
+            imprimir("relatorios/OS_Abertura.jasper", os.getCodigo());
         //Fechamento"
         else
-            imprimir("relatorios/OS_Fechamento.jasper");
+            imprimir("relatorios/OS_Fechamento.jasper", os.getCodigo());
             
         limpaTela();  
     }//GEN-LAST:event_botaoSalvarActionPerformed
@@ -1015,12 +1015,12 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
 
     private void menuImprimirAberturaActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuImprimirAberturaActionPerformed
     {//GEN-HEADEREND:event_menuImprimirAberturaActionPerformed
-        imprimir("relatorios/OS_Abertura.jasper");
+        imprimir("relatorios/OS_Abertura.jasper", Long.parseLong(textoCodigo.getText()));
     }//GEN-LAST:event_menuImprimirAberturaActionPerformed
 
     private void menuImprimirFechamentoActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuImprimirFechamentoActionPerformed
     {//GEN-HEADEREND:event_menuImprimirFechamentoActionPerformed
-        imprimir("relatorios/OS_Fechamento.jasper");
+        imprimir("relatorios/OS_Fechamento.jasper", Long.parseLong(textoCodigo.getText()));
     }//GEN-LAST:event_menuImprimirFechamentoActionPerformed
 
 
@@ -1343,6 +1343,7 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
         if(os.getEntrega() != null)
         {
             entrega = sdf.format(os.getEntrega().getTime());
+            
             if(os.getPagamento().getPagamento().contains("Crédito"))
                 pagamentoVisible(true, true);
             else
@@ -1354,7 +1355,8 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
         textoAbertura.setText(sdf.format(os.getAbertura().getTime()));
         textoFechamento.setText(fechamento);
         textoEntrega.setText(entrega);
-        comboPagamento.setSelectedItem(os.getPagamento().getPagamento());
+        if(os.getEntrega() != null)
+            comboPagamento.setSelectedItem(os.getPagamento().getPagamento());
         textoParcelas.setText(String.valueOf(os.getParcelasPagamento()));
         
         this.getClienteByCodigo(os.getCliente().getCodigo());
@@ -1432,13 +1434,13 @@ public class OrdemDeServico extends javax.swing.JFrame implements KeyListener, C
         somaValores();
     }
     
-    private void imprimir(String relatorio)
+    private void imprimir(String relatorio, Long codigo)
     {
         try
         {
             ControladorRelatorios   relatorios = new ControladorRelatorios();
             HashMap                 parametros = new HashMap();
-            parametros.put("Cod", os.getCodigo());
+            parametros.put("Cod", codigo);
             relatorios.geraRelatorios(relatorio, parametros);
         }
         catch(Exception e)
